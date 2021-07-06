@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="mainPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controllers.Fragments.ProductConstructors.CitilinkShopConstructorFragment">
+   <children>
+      <VBox focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label text="Ссылка на страницу товара:" />
+            <TextField fx:id="linkField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="250.0">
+               <VBox.margin>
+                  <Insets left="8.0" />
+               </VBox.margin>
+            </TextField>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Label text="Наименование: ">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <TextField fx:id="nameField" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="250.0">
+               <VBox.margin>
+                  <Insets left="8.0" />
+               </VBox.margin>
+            </TextField>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <Label text="Период проверки:">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Label>
+            <ChoiceBox fx:id="choiceField" maxWidth="1.7976931348623157E308">
+               <VBox.margin>
+                  <Insets left="8.0" />
+               </VBox.margin>
+            </ChoiceBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
