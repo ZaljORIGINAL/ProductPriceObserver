@@ -8,8 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import sample.Controllers.Fragments.MainWindow.Tables.CitilinkShopTableView;
-import sample.Controllers.Fragments.MainWindow.Tables.ShopTableView;
+import sample.Controllers.Fragments.MainWindow.Tables.ProductsTables.CitilinkProductTableView;
+import sample.Controllers.Fragments.MainWindow.Tables.ProductTableView;
 import sample.OptionsHelper;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class MainWindow implements Initializable {
     public Button getMoreInfo;
     public Button deleteProduct;
     public Button programSettings;
-    private ShopTableView productViewTable;
+    private ProductTableView productViewTable;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,7 +64,7 @@ public class MainWindow implements Initializable {
     }
 
     private void initTablePanel(){
-        productViewTable = new CitilinkShopTableView();
+        productViewTable = new CitilinkProductTableView();
         productViewTable.initFragmentView();
 
         //FIXME Получаема панель не выходит за рамки выделенной ей области.
@@ -77,7 +77,7 @@ public class MainWindow implements Initializable {
         switch (selected){
             case OptionsHelper.SHOP_CITILINK:
             {
-                productViewTable = new CitilinkShopTableView();
+                productViewTable = new CitilinkProductTableView();
             }break;
 
             default:

@@ -5,15 +5,17 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ProductProperty {
     private Product product;
+    private Price price;
     private SimpleStringProperty name;
-    private SimpleFloatProperty price;
+    private SimpleFloatProperty priceValue;
 
     public ProductProperty(Product product, Price price){
         this.product = product;
+        this.price = price;
 
         name = new SimpleStringProperty(
                 product.getName());
-        this.price = new SimpleFloatProperty(
+        priceValue = new SimpleFloatProperty(
                 price.getPrice());
     }
 
@@ -21,19 +23,30 @@ public class ProductProperty {
         return product;
     }
 
+    public Price getPrice(){
+        return price;
+    }
+
     public String getName() {
         return name.get();
     }
 
-    public float getPrice() {
-        return price.get();
+    public float getPriceValue() {
+        return priceValue.get();
     }
 
-    public void setName(String name) {
-        this.name.set(name);
+    public void setProduct(Product product){
+        if (this.product.getId() == product.getId()){
+            this.product = product;
+            this.name.set(this.product.getName());
+        }else
+            throw new RuntimeException("Передан неверный экземпляр объекта типа Product. Id не совпадает! " +
+                    "\nRequired: " + this.product.getId() +
+                    "\nProvided: " + product.getId());
     }
 
-    public void setPrice(float price) {
-        this.price.set(price);
+    public void setPrice(Price price) {
+        this.price = price;
+        priceValue.set(price.getPrice());
     }
 }
