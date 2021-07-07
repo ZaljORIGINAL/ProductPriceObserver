@@ -1,16 +1,15 @@
 package sample.Controllers.Fragments.MainWindow.Tables.ProductsTables;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Pair;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductTableView;
+import sample.Controllers.Fragments.ProductConstructors.CitilinkShopConstructorFragment;
 import sample.Databases.ShopsDatabase.TableCitilinkShop;
+import sample.Products.Product;
 import sample.Products.ProductProperty;
 
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class CitilinkProductTableView extends ProductTableView {
     private TableColumn<ProductProperty, Object> nameColumn;
@@ -64,6 +63,42 @@ public class CitilinkProductTableView extends ProductTableView {
 
     @Override
     protected Dialog buildConstructorDialog() {
+        Dialog<Pair<String, Product>> dialog =
+                new Dialog<>();
+        dialog.setTitle("Конструктор продукта");
+        dialog.setHeaderText("Задайте параметры продукта");
+
+        var constructorFragmetn =
+                new CitilinkShopConstructorFragment();
+        constructorFragmetn.initFragmentView();
+        dialog.getDialogPane().setContent(
+                constructorFragmetn.getMainPanel());
+
+        ButtonType addProductButton =
+                new ButtonType(
+                        "Добавить",
+                        ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes()
+                .addAll(
+                        addProductButton,
+                        ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton->{
+            if (dialogButton == addProductButton){
+                if (constructorFragmetn.checkFields()){
+                    var product =
+                            constructorFragmetn.generateProduct();
+                    var answer = new Pair<>(
+                            "answer",
+                            product);
+
+                    return answer;
+                }
+            }
+
+            //Ну тут хз
+            return null;
+        });
         return null;
     }
 

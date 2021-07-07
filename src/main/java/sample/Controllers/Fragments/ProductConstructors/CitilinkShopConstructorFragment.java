@@ -51,12 +51,12 @@ public class CitilinkShopConstructorFragment extends ConstructorFragment {
         if (!checkNameField())
             answer = false;
 
-        saveProduct();
+        generateProduct();
         return answer;
     }
 
     @Override
-    public boolean saveProduct() {
+    public Product generateProduct() {
         String url = linkField.getText();
         String productName = nameField.getText();
         Product product = new Product(url, productName);

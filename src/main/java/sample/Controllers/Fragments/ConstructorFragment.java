@@ -2,6 +2,7 @@ package sample.Controllers.Fragments;
 
 import sample.Databases.ProductsTable;
 import sample.ProductProxys.ProductProxy;
+import sample.Products.Product;
 
 public abstract class ConstructorFragment extends ViewFragment {
     protected ProductProxy productProxy;
@@ -9,5 +10,5 @@ public abstract class ConstructorFragment extends ViewFragment {
 
     public abstract boolean checkFields();
 
-    public abstract boolean saveProduct();
+    public abstract Product generateProduct();
 }

@@ -77,6 +77,9 @@ public class MainWindow implements Initializable {
         switch (selected){
             case OptionsHelper.SHOP_CITILINK:
             {
+                /*TODO Обработать ошибку. В случае ошибки за место фрагмента
+                   таблици инициализировать спец фрагмент. Читать TO-DO в
+                   классе CitilinkProductTableView.jar"*/
                 productViewTable = new CitilinkProductTableView();
             }break;
 
@@ -90,26 +93,15 @@ public class MainWindow implements Initializable {
     }
 
     private void clickAddNewProduct(){
-        try {
-            URL pathToFxml =
-                    getClass().getResource("/windows/window_product_constructor.fxml");
-            var loader = new FXMLLoader(pathToFxml);
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Просмотр цен");
-            stage.setScene(new Scene(root));
-            stage.show();
-        }catch (IOException exception){
-            //TODO Вывести сообщение о соответсвующей ошибке.
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-        }
+        productViewTable.callProductConstructorDialog();
     }
 
     private void clickShowInfoAbout() {
+        productViewTable.callProductEditorDialog();
     }
 
     private void clickDeleteProduct() {
+        productViewTable.callProductDeleteDialog();
     }
 
     private void clickOpenSettings() {
