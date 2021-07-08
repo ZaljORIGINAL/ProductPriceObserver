@@ -48,21 +48,15 @@ public abstract class ProductParamFragment extends ViewFragment {
         }
     }
 
-    public Product saveProduct(){
-        String url = this.url.getText();
-        String productName = this.name.getText();
-        //TODO Так же сохранять время тригера
-        Product product = new Product(url, productName);
-        return product;
-    }
+    public abstract Product saveProduct();
 
     protected abstract ProductProxy getProductProxy(String linkToProduct) throws IOException;
 
     protected void initTimeToTriggerBox(){
         String[] rows = new String[]{
-                "Раз в 1 час",
-                "Раз в 12 час",
-                "Раз в 24 час",
+                "1 час",
+                "12 час",
+                "24 час",
         };
         ObservableList<String> items =
                 FXCollections.observableArrayList(rows);

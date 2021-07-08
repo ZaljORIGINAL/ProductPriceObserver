@@ -49,7 +49,7 @@ public class TableCitilinkShopTest {
 
     //@Test
     public void insertTest() throws SQLException{
-        Product product = new Product("local", "keyboard");
+        Product product = new Product("local", "keyboard", "1");
 
         TableCitilinkShop table = new TableCitilinkShop();
         table.openConnection();

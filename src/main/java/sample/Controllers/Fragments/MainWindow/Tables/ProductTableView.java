@@ -55,6 +55,7 @@ public abstract class ProductTableView extends ViewFragment {
 
                 if (rows != 0)
                     addToViewTable(product);
+                //TODO Оповестить "Наблюдателя" о поаявлении новог объекта.
             }catch (SQLException exception){
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
@@ -72,7 +73,6 @@ public abstract class ProductTableView extends ViewFragment {
                 dialog.showAndWait();
         result.ifPresent(answer->{
             try {
-                /*TODO Можно сделать проверку на наличие продукта в базе.*/
                 var product = answer.getValue();
                 tableData.openConnection();
                 var rows = tableData.update(product);
@@ -100,7 +100,6 @@ public abstract class ProductTableView extends ViewFragment {
         Optional<ButtonType> option = dialog.showAndWait();
         if (option.get() == ButtonType.OK){
             try {
-                /*TODO Можно сделать проверку на наличие продукта в базе.*/
                 tableData.openConnection();
                 var rows = tableData.delete(product);
                 tableData.closeConnection();
@@ -162,10 +161,6 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     protected void updateToViewTableItem(Product product){
-        /*TODO
-        *  1. Найти в визуальной таблице запись о обнавляемом продукте
-        *  2. Зная, что элементы таблици являются Property объектами
-        *  достаточно задать им изменение, таблица сама обновится. */
         List<ProductProperty> productProperties =
                 tableView.getItems();
         for (ProductProperty property:
@@ -191,9 +186,6 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     protected void deleteItemFromViewTable(Product product){
-        /*TODO
-        *  1. Найти в визуальной таблице запись о обнавляемом продукте
-        *  2. Удалить запись в визуальной таблице*/
         List<ProductProperty> productProperties =
                 tableView.getItems();
         for (ProductProperty property:

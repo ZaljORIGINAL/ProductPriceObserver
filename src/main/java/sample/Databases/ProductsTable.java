@@ -63,6 +63,11 @@ public abstract class ProductsTable extends DatabaseTable {
         return products;
     }
 
+    /*TODO Сконструировать запрос на добавление записи так, что бы
+    *  автоматически были сгенерированы:
+    *       * id записи.
+    *       * Наименование для таблици цен по продукту.
+    *       * Создать таблицу цен.*/
     public int insert(Product product) throws SQLException{
         String sqlCommand = "INSERT INTO " +
                 tableName + " " +
@@ -158,7 +163,9 @@ public abstract class ProductsTable extends DatabaseTable {
                 ProductTableContract.NAME_COLUMN);
         String priceTableName = result.getString(
                 ProductTableContract.PRICE_TABLE_NAME_COLUMN);
+        String triggerPeriod = result.getString(
+                ProductTableContract.TRIGGER_PERIOD);
 
-        return new Product(id, url, name, priceTableName);
+        return new Product(id, url, name, priceTableName, triggerPeriod);
     }
 }
