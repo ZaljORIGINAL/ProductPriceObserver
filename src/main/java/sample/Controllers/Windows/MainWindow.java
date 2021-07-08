@@ -1,19 +1,15 @@
 package sample.Controllers.Windows;
 
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductsTables.CitilinkProductTableView;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductTableView;
 import sample.OptionsHelper;
 
-import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
@@ -34,7 +30,7 @@ public class MainWindow implements Initializable {
         initDeleteProductButton();
         initProgramSettings();
         //Инициафлизация фрагментов окна
-        initTablePanel();
+        switchTableView();
     }
 
     private void initShopChoice() {
@@ -63,30 +59,25 @@ public class MainWindow implements Initializable {
         programSettings.setOnAction(actionEvent -> clickOpenSettings());
     }
 
-    private void initTablePanel(){
-        productViewTable = new CitilinkProductTableView();
-        productViewTable.initFragmentView();
-
-        //FIXME Получаема панель не выходит за рамки выделенной ей области.
-        tablePanel.getChildren().clear();
-        tablePanel.getChildren().add(productViewTable.getMainPanel());
-    }
-
     private void switchTableView(){
         var selected = (String) shopChoice.getValue();
-        switch (selected){
-            case OptionsHelper.SHOP_CITILINK:
-            {
-                /*TODO Обработать ошибку. В случае ошибки за место фрагмента
-                   таблици инициализировать спец фрагмент. Читать TO-DO в
-                   классе CitilinkProductTableView.jar"*/
-                productViewTable = new CitilinkProductTableView();
-            }break;
+        try {
+            switch (selected){
+                case OptionsHelper.SHOP_CITILINK:
+                {
+                    productViewTable = new CitilinkProductTableView();
+                }break;
 
-            default:
-                //Вывести лог о незарегестрированном варианте
+                default:
+                    //Вывести лог о незарегестрированном варианте
+            }
+        }catch (SQLException exception){
+            /*TODO Херня, надо сделать так: конструкторы фрагментов должны сами обрабатывать ошибку.
+            *  Например:
+            *       1. Если отсутсвует база данных, вывети сообщеие: "Данные на компьюторе на обнаружены. Будет создана новая база."
+            *       2. Неудалось считать: Заблокировать все элементы управления: кнопку обновления, визуальную таблиу.*/
         }
-
+        productViewTable.initFragmentView();
         productViewTable.initFragmentView();
         tablePanel.getChildren().clear();
         tablePanel.getChildren().add(productViewTable.getMainPanel());

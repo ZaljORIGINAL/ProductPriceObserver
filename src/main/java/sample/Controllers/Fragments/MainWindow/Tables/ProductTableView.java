@@ -2,11 +2,10 @@ package sample.Controllers.Fragments.MainWindow.Tables;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.util.Pair;
+import sample.Controllers.Fragments.ProductConstructorFragment;
+import sample.Controllers.Fragments.ProductEditorFragment;
 import sample.Controllers.Fragments.ViewFragment;
 import sample.Databases.ProductsTable;
 import sample.Products.Price;
@@ -43,7 +42,8 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     public void callProductConstructorDialog(){
-        Dialog dialog = buildConstructorDialog();
+        Dialog dialog = buildConstructorDialog(
+                getFragmentToConstructor());
         Optional<Pair<String, Product>> result
                 = dialog.showAndWait();
         result.ifPresent(answer->{
@@ -66,7 +66,8 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     public void callProductEditorDialog(){
-        Dialog dialog = buildEditorDialog();
+        Dialog dialog = buildEditorDialog(
+                getFragmentToEditor());
         Optional<Pair<String, Product>> result =
                 dialog.showAndWait();
         result.ifPresent(answer->{
@@ -90,13 +91,16 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     public void callProductDeleteDialog(){
-        Dialog dialog = buildDeleteDialog();
-        Optional<Pair<String, Product>> result =
-                dialog.showAndWait();
-        result.ifPresent(answer->{
+        var productProperty
+                = tableView.getSelectionModel().getSelectedItem();
+        var product = productProperty.getProduct();
+
+        Dialog dialog = buildDeleteDialog(product);
+
+        Optional<ButtonType> option = dialog.showAndWait();
+        if (option.get() == ButtonType.OK){
             try {
                 /*TODO Можно сделать проверку на наличие продукта в базе.*/
-                var product = answer.getValue();
                 tableData.openConnection();
                 var rows = tableData.delete(product);
                 tableData.closeConnection();
@@ -110,7 +114,7 @@ public abstract class ProductTableView extends ViewFragment {
                 messageDialog.setHeaderText("Ошибка в базе данных");
                 messageDialog.setContentText(exception.getMessage());
             }
-        });
+        }
     }
 
     protected void initTableUpdateButton(){
@@ -129,6 +133,10 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     protected abstract void initTableView();
+
+    protected abstract ProductConstructorFragment getFragmentToConstructor();
+
+    protected abstract ProductEditorFragment getFragmentToEditor();
 
     protected void addToViewTable(Product product){
         ProductProperty productProperty;
@@ -197,9 +205,89 @@ public abstract class ProductTableView extends ViewFragment {
         }
     }
 
-    protected abstract Dialog buildConstructorDialog();
+    protected Dialog buildConstructorDialog(ProductConstructorFragment fragment){
+        Dialog<Pair<String, Product>> dialog =
+                new Dialog<>();
+        dialog.setTitle("Конструктор продукта");
+        dialog.setHeaderText("Задайте параметры продукта");
 
-    protected abstract Dialog buildEditorDialog();
+        fragment.initFragmentView();
+        dialog.getDialogPane().setContent(
+                fragment.getMainPanel());
 
-    protected abstract Dialog buildDeleteDialog();
+        ButtonType addProductButton =
+                new ButtonType(
+                        "Добавить",
+                        ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes()
+                .addAll(
+                        addProductButton,
+                        ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton->{
+            if (dialogButton == addProductButton){
+                if (fragment.checkFields()){
+                    var product =
+                            fragment.saveProduct();
+                    var answer = new Pair<>(
+                            "answer",
+                            product);
+
+                    return answer;
+                }
+            }
+
+            //Ну тут хз
+            return null;
+        });
+        return null;
+    }
+
+    protected Dialog buildEditorDialog(ProductEditorFragment fragment){
+        Dialog<Pair<String, Product>> dialog = new Dialog<>();
+        dialog.setTitle("Редактор продукта");
+        dialog.setHeaderText("Параметры продукта");
+
+        fragment.initFragmentView();
+        dialog.getDialogPane().setContent(
+                fragment.getMainPanel());
+
+        ButtonType saveChangeButton =
+                new ButtonType(
+                        "Сохранить",
+                        ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes()
+                .addAll(
+                        saveChangeButton,
+                        ButtonType.CANCEL);
+
+        dialog.setResultConverter(dialogButton->{
+            if (dialogButton == saveChangeButton){
+                if (fragment.checkFields()){
+                    var product =
+                            fragment.saveProduct();
+                    var answer = new Pair<>(
+                            "answer",
+                            product);
+
+                    return answer;
+                }
+            }
+
+            //Ну тут хз
+            return null;
+        });
+        return null;
+    }
+
+    protected Dialog buildDeleteDialog(Product product){
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+        dialog.setTitle("Уадление записи");
+        dialog.setHeaderText("Удалить отслежуемый продукт?");
+        dialog.setContentText("Информация о продукте: " +
+                "\nНаименование: " + product.getName() +
+                "\nСсылка: " + product.getLink());
+
+        return dialog;
+    }
 }

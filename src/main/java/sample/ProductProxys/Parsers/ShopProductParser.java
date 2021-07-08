@@ -6,7 +6,7 @@ import sample.ProductProxys.ProductProxy;
 
 import java.io.IOException;
 
-public abstract class ShopProductParser extends ProductProxy implements ProductParser {
+public abstract class ShopProductParser implements ProductParser {
     protected Document document;
 
     public ShopProductParser(String linkToProduct) throws IOException {

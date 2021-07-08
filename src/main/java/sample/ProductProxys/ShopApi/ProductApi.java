@@ -1,4 +1,6 @@
 package sample.ProductProxys.ShopApi;
 
-public interface ProductApi {
+import sample.ProductProxys.ProductProxy;
+
+public interface ProductApi extends ProductProxy {
 }

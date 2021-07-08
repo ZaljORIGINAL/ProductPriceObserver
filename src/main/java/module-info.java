@@ -18,6 +18,7 @@ module Task2 {
     opens sample.Controllers.Windows;
     opens sample.Controllers.Fragments;
     opens sample.Controllers.Fragments.MainWindow.Tables;
-    opens sample.Controllers.Fragments.ProductConstructors;
     opens sample.Controllers.Fragments.MainWindow.Tables.ProductsTables;
+    opens sample.Controllers.Fragments.ProductConstructors;
+    opens sample.Controllers.Fragments.ProductEditors;
 }
