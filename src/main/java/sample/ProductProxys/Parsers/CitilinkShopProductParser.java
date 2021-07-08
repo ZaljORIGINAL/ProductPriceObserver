@@ -10,6 +10,10 @@ import java.util.Calendar;
 
 public class CitilinkShopProductParser extends ShopProductParser{
 
+    public CitilinkShopProductParser(){
+        super();
+    };
+
     public CitilinkShopProductParser(String linkToProduct) throws IOException {
         super(linkToProduct);
     }

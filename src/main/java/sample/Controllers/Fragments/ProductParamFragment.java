@@ -8,11 +8,12 @@ import org.springframework.util.StringUtils;
 import sample.ProductProxys.ProductProxy;
 import sample.Products.Product;
 
+import java.io.IOException;
+
 public abstract class ProductParamFragment extends ViewFragment {
     public TextField url;
     public TextField name;
     public ChoiceBox<String> timeToTrigger;
-    protected ProductProxy productProxy;
 
     @Override
     public String getPathToFXML() {
@@ -21,17 +22,30 @@ public abstract class ProductParamFragment extends ViewFragment {
     }
 
     public boolean checkFields(){
-        //TODO Перекрашивать поля в соответсвии с результатом
         var answer = true;
-        if (!checkUrlField(productProxy))
-            answer = false;
-        if (!checkNameField())
-            answer = false;
-        if (!checkTriggerField())
-            answer = false;
 
-        saveProduct();
-        return answer;
+        var productProxy = checkUrlField();
+        if (productProxy != null){
+                url.setStyle("-fx-background-color: #c1ffb2");
+
+            if (checkNameField(productProxy)){
+                name.setStyle("-fx-background-color: #c1ffb2");
+            }else {
+                answer = false;
+                name.setStyle("-fx-background-color: #FDB7B7;");
+            }
+            if (checkTriggerField()){
+                timeToTrigger.setStyle("-fx-background-color: #c1ffb2");
+            }else {
+                answer = false;
+                timeToTrigger.setStyle("-fx-background-color: #FDB7B7;");
+            }
+
+            return answer;
+        }else {
+            url.setStyle("-fx-background-color: #FDB7B7;");
+            return false;
+        }
     }
 
     public Product saveProduct(){
@@ -41,6 +55,8 @@ public abstract class ProductParamFragment extends ViewFragment {
         Product product = new Product(url, productName);
         return product;
     }
+
+    protected abstract ProductProxy getProductProxy(String linkToProduct) throws IOException;
 
     protected void initTimeToTriggerBox(){
         String[] rows = new String[]{
@@ -53,19 +69,23 @@ public abstract class ProductParamFragment extends ViewFragment {
         timeToTrigger.setItems(items);
     }
 
-    protected boolean checkUrlField(ProductProxy productProxy){
+    protected ProductProxy checkUrlField(){
         String linkToProduct = url.getText();
         linkToProduct = StringUtils.trimAllWhitespace(linkToProduct);
-        if (StringUtils.hasText(linkToProduct)){
-            //TODO Прописать логику проверки ссылки на действительность
-            return true;
-        }else {
-            url.setStyle("-fx-background-color: #FDB7B7;");
-            return false;
+        if (StringUtils.hasText(linkToProduct)) {
+            try {
+                var productProxy = getProductProxy(linkToProduct);
+                return productProxy;
+            }catch (IOException exception) {
+                return null;
+            }
+        }else{
+            timeToTrigger.setStyle("-fx-background-color: #FDB7B7;");
+            return null;
         }
     }
 
-    protected boolean checkNameField(){
+    protected boolean checkNameField(ProductProxy productProxy){
         String productName = name.getText();
         productName = StringUtils.trimAllWhitespace(productName);
         if (StringUtils.hasText(productName)) {
