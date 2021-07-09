@@ -7,6 +7,9 @@ import sample.Products.Product;
 import java.sql.*;
 import java.util.ArrayList;
 
+/*FIXME
+   1. Закрыть все JDBS объекты(Result, statement). Тоесть поместить в try/cat
+*  */
 public abstract class ProductsTable extends DatabaseTable {
     public ProductsTable() { }
 
@@ -16,9 +19,7 @@ public abstract class ProductsTable extends DatabaseTable {
 
     public Connection openConnection() throws SQLException {
         connection = DriverManager.getConnection(
-                DATABASE_URL + "databaseName=" + DATABASE_NAME + " ",
-                DatabaseContract.USER_NAME,
-                DatabaseContract.USER_PASSWORD);
+                "jdbc:postgresql://localhost/Task2");//FIXME Перенести в константы
 
         return connection;
     }

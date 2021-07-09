@@ -83,11 +83,13 @@ public class ProductPricesTable extends DatabaseTable {
                 PriceTableContract.PRICE_COLUMN + ") " +
                 "VALUES (?, ?)";
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        Object time = new java.sql.Timestamp(price.getDate().getTimeInMillis());
-        statement.setObject(1, time);
-        statement.setFloat(2, price.getPrice());
-        return statement.executeUpdate();
+        try (PreparedStatement statement = connection.prepareStatement(sqlCommand) ) {
+            Object time = new java.sql.Timestamp(price.getDate().getTimeInMillis());
+            statement.setObject(1, time);
+            statement.setFloat(2, price.getPrice());
+            return statement.executeUpdate();
+        }
+
     }
 
     public int insert(ArrayList<Price> prices) throws SQLException{
@@ -111,6 +113,7 @@ public class ProductPricesTable extends DatabaseTable {
         PreparedStatement statement = connection.prepareStatement(sqlCommand);
         ResultSet result = statement.executeQuery();
         result.next();
+
         return extractToPrice(result);
     }
 
