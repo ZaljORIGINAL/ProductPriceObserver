@@ -9,7 +9,7 @@ import sample.Databases.ProductPricesTable;
 import sample.Databases.ProductsTable;
 import sample.Products.Price;
 import sample.Products.Product;
-import sample.Products.ProductProperty;
+import sample.Products.ActualProduct;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public abstract class ProductTableView extends ViewFragment {
-    public TableView<ProductProperty> tableView;
+    public TableView<ActualProduct> tableView;
     public Button tableUpdate;
     protected ProductsTable tableData;
 
@@ -32,25 +32,40 @@ public abstract class ProductTableView extends ViewFragment {
     public void updateTable() throws SQLException{
         tableUpdate.setDisable(true);
         var products = tableData.getAll();
+
         tableView.getItems().clear();
+
         for (Product product : products) {
-            addToViewTable(product);
+            try {
+                var pricesTable =
+                        new ProductPricesTable(
+                                product.getPriceTableName());
+                var lastPrice = pricesTable.getLastPrice();
+                var actualProduct = new ActualProduct(
+                        product,
+                        lastPrice);
+                addToViewTable(actualProduct);
+            }catch (SQLException exception){
+                //TODO Записать лог о неудачи считывания цены
+            }
         }
         tableUpdate.setDisable(false);
     }
 
-    //TODO При добавлении продукта получить цену
     public void callProductConstructorDialog(){
         Dialog dialog = buildConstructorDialog(
                 getFragmentToConstructor());
-        Optional<Pair<String, Product>> result
+        Optional<Pair<String, ActualProduct>> result
                 = dialog.showAndWait();
         result.ifPresent(answer->{
             try{
-                var product = tableData.insert(
-                        answer.getValue());
+                var actualProduct = answer.getValue();
+                var product = tableData.insert(actualProduct.getProduct());
+                var priceTable = new ProductPricesTable(product.getPriceTableName());
+                var price = priceTable.insert(actualProduct.getPrice());
+
                 if (product.getId() != -1){
-                    addToViewTable(product);
+                    addToViewTable(new ActualProduct(product, price));
                 }
             }catch (SQLException exception){
                 Alert messageDialog =
@@ -65,15 +80,16 @@ public abstract class ProductTableView extends ViewFragment {
     public void callProductEditorDialog(){
         Dialog dialog = buildEditorDialog(
                 getFragmentToEditor());
-        Optional<Pair<String, Product>> result =
+        Optional<Pair<String, ActualProduct>> result =
                 dialog.showAndWait();
         result.ifPresent(answer->{
             try {
-                var product = answer.getValue();
-                var rows = tableData.update(product);
+                var actualProduct = answer.getValue();
+                var rows = tableData.update(
+                        actualProduct.getProduct());
 
                 if (rows != 0)
-                    updateItemInViewTable(product);
+                    tableView.refresh();
             }catch (SQLException exception){
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
@@ -132,61 +148,29 @@ public abstract class ProductTableView extends ViewFragment {
 
     protected abstract ProductEditorFragment getFragmentToEditor();
 
-    protected void addToViewTable(Product product){
-        ProductProperty productProperty;
-        try{
-            var pricesTableName = product.getPriceTableName();
-            var pricesTable = new ProductPricesTable(pricesTableName);
-            var lastPrice = pricesTable.getLastPrice();
-            productProperty = new ProductProperty(
-                    product,
-                    lastPrice);
-        }catch (SQLException exception){
-            /*TODO Добавить лог об ошибке. Так же сделать сдел
-            *  При ошибке вывести запись о товаре, но в место
-            *  цены указать: "Нет информации"*/
-            Price price = new Price(
-                    Calendar.getInstance(),
-                    -1);
-            productProperty = new ProductProperty(
-                    product,
-                    price);
-        }
-
-        tableView.getItems().add(productProperty);
+    protected void addToViewTable(ActualProduct actualProduct){
+        tableView.getItems().add(actualProduct);
     }
 
-    protected void updateItemInViewTable(Product product){
-        List<ProductProperty> productProperties =
+    protected void updateItemInViewTable(ActualProduct actualProduct){
+        List<ActualProduct> items =
                 tableView.getItems();
-        for (ProductProperty property:
-             productProperties) {
+        for (ActualProduct property:
+             items) {
             var toComparison = property.getProduct();
-            if (product.getId() == toComparison.getId()){
-                Price price;
-                try {
-                var pricesTableName = product.getPriceTableName();
-                var pricesTable = new ProductPricesTable(pricesTableName);
-                price = pricesTable.getLastPrice();
-                }catch (SQLException exception){
-                    /*TODO Добавить лог об ошибке.
-                     *  При ошибке вывести запись о товаре, но в место
-                     *  цены указать: "Нет информации"*/
-                    price = new Price(
-                            Calendar.getInstance(),
-                            -1);
-                }
-                property.setProduct(product);
-                property.setPrice(price);
+            if (actualProduct.getProduct().getId() == toComparison.getId()){
+                items.set(toComparison.getId(), actualProduct);
+                tableView.refresh();
+                return;
             }
         }
     }
 
     protected void deleteItemFromViewTable(Product product){
-        List<ProductProperty> productProperties =
+        List<ActualProduct> productProperties =
                 tableView.getItems();
-        ProductProperty productToDelete = null;
-        for (ProductProperty property:
+        ActualProduct productToDelete = null;
+        for (ActualProduct property:
                 productProperties) {
             var toComparison = property.getProduct();
             if (product.getId() == toComparison.getId()){
@@ -200,7 +184,7 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     protected Dialog buildConstructorDialog(ProductConstructorFragment fragment){
-        Dialog<Pair<String, Product>> dialog =
+        Dialog<Pair<String, ActualProduct>> dialog =
                 new Dialog<>();
         dialog.setTitle("Конструктор продукта");
         dialog.setHeaderText("Задайте параметры продукта");
@@ -236,7 +220,7 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     protected Dialog buildEditorDialog(ProductEditorFragment fragment){
-        Dialog<Pair<String, Product>> dialog = new Dialog<>();
+        Dialog<Pair<String, ActualProduct>> dialog = new Dialog<>();
         dialog.setTitle("Редактор продукта");
         dialog.setHeaderText("Параметры продукта");
 

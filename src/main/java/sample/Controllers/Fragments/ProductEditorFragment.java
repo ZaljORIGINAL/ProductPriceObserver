@@ -1,8 +1,12 @@
 package sample.Controllers.Fragments;
 
+import sample.Databases.ProductPricesTable;
+import sample.Products.ActualProduct;
+import sample.Products.Price;
 import sample.Products.Product;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public abstract class ProductEditorFragment extends ProductParamFragment{
@@ -14,15 +18,29 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initTriggerSelectBox();
+        initView();
 
         //FIXME Требуется установить актуальный период тригера время
-        linkField.setText(product.getLink());
-        nameField.setText(product.getName());
+        try {
+            linkField.setText(product.getLink());
+            nameField.setText(product.getName());
+            nameField.setDisable(false);
+            choiceField.setDisable(false);
+            var pricesTable =
+                    new ProductPricesTable(product.getPriceTableName());
+            var prices = pricesTable.getAll();
+            for (Price price : prices) {
+                priceTable.getItems().add(price);
+            }
+            priceTable.refresh();
+            priceTable.setDisable(false);
+        }catch (SQLException exception){
+            //TODO Вывести лог ошибки.
+        }
     }
 
     @Override
-    public Product saveProduct() {
+    public ActualProduct saveProduct() {
         String url = this.linkField.getText();
         String productName = this.nameField.getText();
         long triggerPeriod;
@@ -40,6 +58,9 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
         product.setUrl(url);
         product.setName(productName);
         product.setTriggerPeriod(triggerPeriod);
-        return product;
+        var price = priceTable.getItems().get(
+                priceTable.getItems().size() - 1);
+
+        return new ActualProduct(product, price);
     }
 }

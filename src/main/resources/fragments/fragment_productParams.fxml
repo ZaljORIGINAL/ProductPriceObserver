@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -15,9 +17,14 @@
             <Label text="Ссылка на страницу товара:" />
             <TextField fx:id="linkField" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="250.0">
                <VBox.margin>
-                  <Insets left="8.0" />
+                  <Insets left="8.0" right="8.0" />
                </VBox.margin>
             </TextField>
+            <Button fx:id="checkLinkButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Запросить">
+               <VBox.margin>
+                  <Insets left="20.0" right="20.0" top="5.0" />
+               </VBox.margin>
+            </Button>
             <Separator prefWidth="200.0">
                <VBox.margin>
                   <Insets top="5.0" />
@@ -30,7 +37,7 @@
             </Label>
             <TextField fx:id="nameField" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefWidth="250.0">
                <VBox.margin>
-                  <Insets left="8.0" />
+                  <Insets left="8.0" right="8.0" />
                </VBox.margin>
             </TextField>
             <Separator prefWidth="200.0">
@@ -45,9 +52,19 @@
             </Label>
             <ChoiceBox fx:id="choiceField" maxWidth="1.7976931348623157E308">
                <VBox.margin>
-                  <Insets left="8.0" />
+                  <Insets left="8.0" right="8.0" />
                </VBox.margin>
             </ChoiceBox>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Separator>
+            <TableView fx:id="priceTable" prefHeight="200.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </TableView>
          </children>
       </VBox>
    </children>

@@ -31,6 +31,24 @@ public class ProductPricesTable extends DatabaseTable {
         }
     }
 
+    public List<Price> getAll() throws SQLException{
+        try (var connection = getConnection()){
+            String sqlConnection = "SELECT * FROM " +
+                    tableName + " ";
+            try (var statement =
+                    connection.prepareStatement(sqlConnection)){
+                try (var result = statement.executeQuery()){
+                    List<Price> answer = new ArrayList<>();
+                    while (result.next()){
+                        var price = extractToPrice(result);
+                        answer.add(price);
+                    }
+                    return answer;
+                }
+            }
+        }
+    }
+
     public Price getById(int id) throws SQLException{
         try (var connection = getConnection()){
             var sqlCommand = "SELECT * FROM " +

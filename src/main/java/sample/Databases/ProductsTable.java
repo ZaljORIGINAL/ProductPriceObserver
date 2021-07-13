@@ -99,8 +99,6 @@ public class ProductsTable extends DatabaseTable {
                 try(var result = statement.executeQuery()){
                     result.next();
                     var id = result.getInt(ProductTableContract.ID_COLUMN);
-                    /*TODO Сделать ошибочный запрос, что бы проверить, что
-                       вернет базаданных если запись не произойдет */
                     String priceTableName = tableName + "_price_of_" + id;
                     product = new Product(
                             id,

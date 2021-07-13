@@ -1,5 +1,6 @@
 package sample.Controllers.Fragments;
 
+import sample.Products.ActualProduct;
 import sample.Products.Product;
 
 import java.net.URL;
@@ -9,11 +10,11 @@ public abstract class ProductConstructorFragment extends ProductParamFragment {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initTriggerSelectBox();
+        initView();
     }
 
     @Override
-    public Product saveProduct() {
+    public ActualProduct saveProduct() {
         String url = this.linkField.getText();
         String productName = this.nameField.getText();
 
@@ -29,7 +30,10 @@ public abstract class ProductConstructorFragment extends ProductParamFragment {
                 triggerPeriod = 3600000;
         }
 
-        Product product = new Product(url, productName, triggerPeriod);
-        return product;
+        var product = new Product(url, productName, triggerPeriod);
+        var price = priceTable.getItems().get(
+                priceTable.getItems().size() - 1);
+
+        return new ActualProduct(product, price);
     }
 }
