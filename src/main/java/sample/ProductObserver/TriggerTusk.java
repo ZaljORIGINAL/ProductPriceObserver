@@ -1,6 +1,7 @@
 package sample.ProductObserver;
 
-import sample.ProductObserver.Factorys.CitilinkShopToolsFactory;
+import sample.ShopToolsFactories.Factorys.CitilinkShopToolsFactory;
+import sample.ShopToolsFactories.ProductToolsFactory;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,10 +41,11 @@ public class TriggerTusk extends TimerTask {
                     priceObserver.check(tools, finishSignal);
                 }
                 finishSignal.await();
-            }catch (InterruptedException exception){//TODO Узнать, что за тип ошибки
+            }catch (InterruptedException exception){
                 //TODO Прописать лог
             }
         }
+
     }
 
     private List<ProductToolsFactory> getToolsFactories(){

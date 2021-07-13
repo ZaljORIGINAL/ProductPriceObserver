@@ -1,45 +1,56 @@
 package sample.Databases;
 
-import sample.Databases.Contracts.DatabaseContract;
 import sample.Databases.Contracts.ProductTableContract;
 import sample.Products.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
-/*FIXME
-   1. Закрыть все JDBS объекты(Result, statement). Тоесть поместить в try/cat
-*  */
-public abstract class ProductsTable extends DatabaseTable {
-    public ProductsTable() { }
+public class ProductsTable extends DatabaseTable {
 
-    public String getName(){
-        return tableName;
+    public ProductsTable(String tableName) throws SQLException {
+        super(tableName);
     }
 
-    public Connection openConnection() throws SQLException {
-        connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost/Task2");//FIXME Перенести в константы
+    @Override
+    public boolean createTable() throws SQLException {
+        try (var connection = getConnection()){
+            String sqlCommand = "CREATE TABLE " +
+                    tableName + " " +
+                    "(" +
+                    ProductTableContract.ID_COLUMN + " SERIAL PRIMARY KEY, " +
+                    ProductTableContract.URL_COLUMN + " CHARACTER VARYING("+ ProductTableContract.MAX_SYMBOL_TO_URL +") NOT NULL, " +
+                    ProductTableContract.NAME_COLUMN + " CHARACTER VARYING("+ ProductTableContract.MAX_SYMBOL_TO_NAME +") NOT NULL, " +
+                    ProductTableContract.TRIGGER_COLUMN + " BIGINT NOT NULL" +
+                    ")";
 
-        return connection;
+            try(var statement =
+                        connection.prepareStatement(sqlCommand)){
+                return statement.execute();
+            }
+        }
     }
 
     public Product getById(int id) throws SQLException{
-        var sqlCommand = "SELECT * FROM " +
-                tableName + " WHERE " + ProductTableContract.ID_COLUMN + "=?";
+        try(var connection = getConnection()){
+            var sqlCommand = "SELECT * FROM " +
+                    tableName + " WHERE " + ProductTableContract.ID_COLUMN + "=?";
 
-        var statement =
-                connection.prepareStatement(sqlCommand);
-        statement.setInt(1, id);
-        var result = statement.executeQuery();
+            try (var statement =
+                         connection.prepareStatement(sqlCommand)) {
+                statement.setInt(1, id);
+                var result = statement.executeQuery();
 
-        Product product = null;
-        if (result.next())
-            product = extractToProduct(result);
-        return product;
+                Product product = null;
+                if (result.next())
+                    product = extractToProduct(result);
+                return product;
+            }
+        }
     }
 
-    public ArrayList<Product> getById(ArrayList<Integer> ids) throws SQLException{
+    public List<Product> getById(List<Integer> ids) throws SQLException{
         ArrayList<Product> products = new ArrayList<>();
         for (Integer id : ids) {
             var product = getById(id);
@@ -49,68 +60,93 @@ public abstract class ProductsTable extends DatabaseTable {
         return products;
     }
 
-    public ArrayList<Product> getAll() throws SQLException{
-        String sqlCommand = "SELECT * FROM " +
-                tableName +" ";
-        var statement =
-                connection.prepareStatement(sqlCommand);
-        var result = statement.executeQuery();
+    public List<Product> getAll() throws SQLException{
+        try (var connection = getConnection()){
+            String sqlCommand = "SELECT * FROM " +
+                    tableName +" ";
+            try(var statement =
+                        connection.prepareStatement(sqlCommand)) {
+                try (var result = statement.executeQuery()) {
 
-        ArrayList<Product> products = new ArrayList<>();
-        while (result.next()){
-            var product = extractToProduct(result);
+                    ArrayList<Product> products = new ArrayList<>();
+                    while (result.next()) {
+                        var product = extractToProduct(result);
+                        products.add(product);
+                    }
+
+                    return products;
+                }
+            }
         }
-
-        return products;
     }
 
-    /*TODO Сконструировать запрос на добавление записи так, что бы
-    *  автоматически были сгенерированы:
-    *       * id записи.
-    *       * Наименование для таблици цен по продукту.
-    *       * Создать таблицу цен.*/
-    public int insert(Product product) throws SQLException{
-        String sqlCommand = "INSERT INTO " +
-                tableName + " " +
-                "(" +
-                ProductTableContract.URL_COLUMN + ", " +
-                ProductTableContract.NAME_COLUMN + ") " +
-                "VALUES (?, ?)";
+    public Product insert(Product product) throws SQLException{
+        try (var connection = getConnection()){
+            String sqlCommand = "INSERT INTO " +
+                    tableName + " " +
+                    "(" +
+                    ProductTableContract.URL_COLUMN + ", " +
+                    ProductTableContract.NAME_COLUMN + ", " +
+                    ProductTableContract.TRIGGER_COLUMN +
+                    ") " +
+                    "VALUES (?, ?, ?) " +
+                    "RETURNING  " + ProductTableContract.ID_COLUMN;
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        statement.setString(1, product.getLink());
-        statement.setString(2, product.getName());
-        return statement.executeUpdate();
+            try (var statement = connection.prepareStatement(sqlCommand)) {
+                statement.setString(1, product.getLink());
+                statement.setString(2, product.getName());
+                statement.setLong(3, product.getTriggerPeriod());
+                try(var result = statement.executeQuery()){
+                    result.next();
+                    var id = result.getInt(ProductTableContract.ID_COLUMN);
+                    /*TODO Сделать ошибочный запрос, что бы проверить, что
+                       вернет базаданных если запись не произойдет */
+                    String priceTableName = tableName + "_price_of_" + id;
+                    product = new Product(
+                            id,
+                            product.getLink(),
+                            product.getName(),
+                            product.getTriggerPeriod(),
+                            priceTableName);
+                    return product;
+                }
+            }
+        }
     }
 
-    public int insert(ArrayList<Product> products) throws SQLException{
-        int changedRows = 0;
+    public List<Product> insert(List<Product> products) throws SQLException{
+        List<Product> inserted = new ArrayList<>();
         for (Product product : products) {
             var result = insert(product);
-            changedRows += result;
+            inserted.add(result);
         }
 
-        return changedRows;
+        return inserted;
     }
 
     public int update(Product product) throws SQLException{
-        String sqlCommand = "UPDATE " +
-                tableName  + " " +
-                "SET " +
-                ProductTableContract.URL_COLUMN + " = ?, " +
-                ProductTableContract.NAME_COLUMN + " = ? " +
-                "WHERE " +
-                ProductTableContract.ID_COLUMN + " = ?";
+        try (var connection = getConnection()){
+            String sqlCommand = "UPDATE " +
+                    tableName  + " " +
+                    "SET " +
+                    ProductTableContract.URL_COLUMN + " = ?, " +
+                    ProductTableContract.NAME_COLUMN + " = ?, " +
+                    ProductTableContract.TRIGGER_COLUMN + " = ? " +
+                    "WHERE " +
+                    ProductTableContract.ID_COLUMN + " = ?";
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        statement.setString(1, product.getLink());
-        statement.setString(2, product.getName());
-        statement.setInt(3, product.getId());
+            try (var statement = connection.prepareStatement(sqlCommand)) {
+                statement.setString(1, product.getLink());
+                statement.setString(2, product.getName());
+                statement.setLong(3, product.getTriggerPeriod());
+                statement.setInt(4, product.getId());
 
-        return statement.executeUpdate();
+                return statement.executeUpdate();
+            }
+        }
     }
 
-    public int update(ArrayList<Product> products) throws SQLException{
+    public int update(List<Product> products) throws SQLException{
         int changedRows = 0;
         for (Product product : products){
             int answer = update(product);
@@ -121,14 +157,16 @@ public abstract class ProductsTable extends DatabaseTable {
     }
 
     public int delete(int id) throws SQLException{
-        String sqlCommand = "DELETE FROM " +
-                tableName + " " +
-                "WHERE " +
-                ProductTableContract.ID_COLUMN + " = ?";
+        try (var connection = getConnection()){
+            String sqlCommand = "DELETE FROM " +
+                    tableName + " " +
+                    "WHERE " +
+                    ProductTableContract.ID_COLUMN + " = ?";
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        statement.setInt(1, id);
-        return statement.executeUpdate();
+            PreparedStatement statement = connection.prepareStatement(sqlCommand);
+            statement.setInt(1, id);
+            return statement.executeUpdate();
+        }
     }
 
     public int delete(int[] ids) throws SQLException{
@@ -162,11 +200,10 @@ public abstract class ProductsTable extends DatabaseTable {
                 ProductTableContract.URL_COLUMN);
         String name = result.getString(
                 ProductTableContract.NAME_COLUMN);
-        String priceTableName = result.getString(
-                ProductTableContract.PRICE_TABLE_NAME_COLUMN);
-        String triggerPeriod = result.getString(
-                ProductTableContract.TRIGGER_PERIOD);
+        long triggerPeriod = result.getLong(
+                ProductTableContract.TRIGGER_COLUMN);
+        String priceTableName = tableName + "_price_of_" + id;
 
-        return new Product(id, url, name, priceTableName, triggerPeriod);
+        return new Product(id, url, name, triggerPeriod, priceTableName);
     }
 }

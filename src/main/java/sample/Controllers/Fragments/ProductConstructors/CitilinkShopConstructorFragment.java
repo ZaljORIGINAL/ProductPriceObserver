@@ -13,11 +13,7 @@ public class CitilinkShopConstructorFragment extends ProductConstructorFragment 
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-    }
-
-    @Override
     protected ProductProxy getProductProxy(String linkToProduct) throws IOException {
-        return new CitilinkShopProductParser();
+        return new CitilinkShopProductParser(linkToProduct);
     }
 }

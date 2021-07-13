@@ -29,8 +29,6 @@ public class MainWindow implements Initializable {
         initGetMoreInfoButton();
         initDeleteProductButton();
         initProgramSettings();
-        //Инициафлизация фрагментов окна
-        switchTableView();
     }
 
     private void initShopChoice() {
@@ -39,8 +37,8 @@ public class MainWindow implements Initializable {
                         OptionsHelper.SHOP_CITILINK
                 };
         shopChoice.getItems().addAll(choiceVariants);
-        shopChoice.setValue(shopChoice.getItems().get(0));
         shopChoice.setOnAction(actionEvent -> switchTableView());
+        shopChoice.setValue(choiceVariants[0]);
     }
 
     private void initAddNewProductButton(){
@@ -74,13 +72,12 @@ public class MainWindow implements Initializable {
         }catch (SQLException exception){
             /*TODO Херня, надо сделать так: конструкторы фрагментов должны сами обрабатывать ошибку.
             *  Например:
-            *       1. Если отсутсвует база данных, вывети сообщеие: "Данные на компьюторе на обнаружены. Будет создана новая база."
-            *       2. Неудалось считать: Заблокировать все элементы управления: кнопку обновления, визуальную таблиу.*/
+            *       1. Неудалось считать: Заблокировать все элементы управления: кнопку обновления, визуальную таблиу.*/
         }
         productViewTable.initFragmentView();
-        productViewTable.initFragmentView();
-        tablePanel.getChildren().clear();
-        tablePanel.getChildren().add(productViewTable.getMainPanel());
+        var children = tablePanel.getChildren();
+        children.clear();
+        children.add(productViewTable.getMainPanel());
     }
 
     private void clickAddNewProduct(){

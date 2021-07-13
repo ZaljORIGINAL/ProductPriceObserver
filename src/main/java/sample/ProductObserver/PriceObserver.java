@@ -1,7 +1,9 @@
 package sample.ProductObserver;
 
+import sample.Databases.ProductPricesTable;
 import sample.ProductProxys.ProductProxy;
 import sample.Products.Product;
+import sample.ShopToolsFactories.ProductToolsFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,13 +33,12 @@ public class PriceObserver {
         return () -> {
             for (Product product: products) {
                 try {
-                    var priceTable = product.getPriceTable();
+                    var priceTableName = product.getPriceTableName();
+                    var priceTable = new ProductPricesTable(priceTableName);
                     ProductProxy productProxy = tools.getParser(
                             product.getLink());
                     var price = productProxy.getPrice();
-                    priceTable.openConnection();
                     priceTable.insert(price);
-                    priceTable.closeConnection();
                     finishSignal.countDown();
                 }catch (IOException | SQLException exception){
                     //TODO Прописать лог по записи информации о ошибка

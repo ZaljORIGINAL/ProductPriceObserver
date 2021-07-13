@@ -1,68 +1,53 @@
 package sample.Databases;
 
-import sample.Databases.Contracts.DatabaseContract;
-import sample.Databases.Contracts.PriceTableContract;
+import sample.Databases.Contracts.ProductPricesContract;
 import sample.Products.Price;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class ProductPricesTable extends DatabaseTable {
-    /*TODO В целях сохренения уникальности наименований таблиц данных
-       следует задать следующую логику формирования наименования таблци
-       данных по ценам по продукту отдельного магазина */
-    public ProductPricesTable(String tableName) throws SQLException{
-        this.tableName = tableName;
-
-        openConnection();
-        if (!existsTable()){
-            createTable();
-        }
-        closeConnection();
-    }
-
-    public String getName() {
-        return tableName;
+    public ProductPricesTable(String tableName) throws SQLException {
+        super(tableName);
     }
 
     @Override
     public boolean createTable() throws SQLException {
-        String sqlCommand = "CREATE TABLE " + tableName +
-                " ( " +
-                PriceTableContract.ID_COLUMN + " INT PRIMARY KEY IDENTITY, " +
-                PriceTableContract.DATE_COLUMN + " DATETIME NOT NULL, " +
-                PriceTableContract.PRICE_COLUMN + " MONEY NOT NULL " +
-                ")";
-        var statement = connection.prepareStatement(sqlCommand);
+        try (var connection = getConnection()){
+            String sqlCommand = "CREATE TABLE " +
+                    tableName + " " +
+                    "(" +
+                    ProductPricesContract.ID_COLUMN + " SERIAL PRIMARY KEY, " +
+                    ProductPricesContract.DATE_COLUMN + " TIMESTAMP NOT NULL, " +
+                    ProductPricesContract.PRICE_COLUMN + " NUMERIC NOT NULL " +
+                    ")";
 
-        if (statement.executeUpdate() == 1)
-            return true;
-        else
-            return false;
-    }
-
-    public Connection openConnection() throws SQLException {
-        connection = DriverManager.getConnection(
-                DATABASE_URL + "databaseName=" + DATABASE_NAME,
-                DatabaseContract.USER_NAME,
-                DatabaseContract.USER_PASSWORD);
-        return connection;
+            try(var statement =
+                        connection.prepareStatement(sqlCommand)){
+                return statement.execute();
+            }
+        }
     }
 
     public Price getById(int id) throws SQLException{
-        var sqlCommand = "SELECT * FROM " +
-                tableName + " ";
+        try (var connection = getConnection()){
+            var sqlCommand = "SELECT * FROM " +
+                    tableName + " ";
 
-        var statement =
-                connection.prepareStatement(sqlCommand);
-        var result = statement.executeQuery();
+            try (var statement =
+                         connection.prepareStatement(sqlCommand)) {
+                try (var result = statement.executeQuery()) {
 
-        Price price = null;
-        if (result.next())
-            price = extractToPrice(result);
+                    Price price = null;
+                    if (result.next())
+                        price = extractToPrice(result);
 
-        return price;
+                    return price;
+                }
+            }
+        }
     }
 
     public ArrayList<Price> getById(ArrayList<Integer> ids) throws SQLException{
@@ -75,57 +60,66 @@ public class ProductPricesTable extends DatabaseTable {
         return prices;
     }
 
-    public int insert(Price price) throws SQLException{
-        String sqlCommand = "INSERT INTO " +
-                tableName + " " +
-                "(" +
-                PriceTableContract.DATE_COLUMN + ", " +
-                PriceTableContract.PRICE_COLUMN + ") " +
-                "VALUES (?, ?)";
+    public Price insert(Price price) throws SQLException{
+        try (var connection = getConnection()){
+            String sqlCommand = "INSERT INTO " +
+                    tableName + " " +
+                    "(" +
+                    ProductPricesContract.DATE_COLUMN + ", " +
+                    ProductPricesContract.PRICE_COLUMN + ") " +
+                    "VALUES (?, ?) RETURNING " + ProductPricesContract.ID_COLUMN;
 
-        try (PreparedStatement statement = connection.prepareStatement(sqlCommand) ) {
-            Object time = new java.sql.Timestamp(price.getDate().getTimeInMillis());
-            statement.setObject(1, time);
-            statement.setFloat(2, price.getPrice());
-            return statement.executeUpdate();
+            try (var statement = connection.prepareStatement(sqlCommand) ) {
+                Timestamp time = new java.sql.Timestamp(price.getCalendar().getTimeInMillis());
+                statement.setTimestamp(1, time);
+                statement.setFloat(2, price.getPrice());
+                try (var result = statement.executeQuery()){
+                    result.next();
+                    var id = result.getInt(ProductPricesContract.ID_COLUMN);
+                    return new Price(id, price.getCalendar(), price.getPrice());
+                }
+            }
         }
-
     }
 
-    public int insert(ArrayList<Price> prices) throws SQLException{
-        int changedRows = 0;
+    public List<Price> insert(ArrayList<Price> prices) throws SQLException{
+        List<Price> inserted = new ArrayList<>();
         for (Price price : prices) {
             var result = insert(price);
-            changedRows += result;
+            inserted.add(result);
         }
 
-        return changedRows;
+        return inserted;
     }
 
     public Price getLastPrice() throws SQLException{
-        String sqlCommand = "SELECT * FROM " +
-                tableName + " " +
-                "WHERE " + PriceTableContract.ID_COLUMN + "=" +
-                "(SELECT " + PriceTableContract.ID_COLUMN + " FROM " +
-                tableName +
-                "WHERE MAX(" + PriceTableContract.ID_COLUMN + "))";
+        try (var connection = getConnection()){
+            String sqlCommand = "SELECT * FROM " +
+                    tableName + " " +
+                    "WHERE " + ProductPricesContract.ID_COLUMN + "=" +
+                    "(SELECT MAX(" + ProductPricesContract.ID_COLUMN + ") FROM " +
+                    tableName + " " +
+                    ")";
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        ResultSet result = statement.executeQuery();
-        result.next();
+            try (var statement =
+                         connection.prepareStatement(sqlCommand)) {
+                ResultSet result = statement.executeQuery();
+                result.next();
 
-        return extractToPrice(result);
+                return extractToPrice(result);
+            }
+        }
     }
 
     private Price extractToPrice(ResultSet result) throws SQLException{
         var id = result.getInt(
-                PriceTableContract.ID_COLUMN);
+                ProductPricesContract.ID_COLUMN);
         var d = (Timestamp) result.getObject(
-                PriceTableContract.DATE_COLUMN);
+                ProductPricesContract.DATE_COLUMN);
         Calendar date = Calendar.getInstance();
         date.setTimeInMillis(d.getTime());
         var price = result.getFloat(
-                PriceTableContract.PRICE_COLUMN);
+                ProductPricesContract.PRICE_COLUMN);
 
         return new Price(id, date, price);
     }

@@ -6,14 +6,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
+import sample.ProductObserver.TriggerTusk;
 
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Timer;
 
 public class Main extends Application {
     private ApplicationContext context;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        Timer timer = new Timer();
+        timer.schedule(
+                new TriggerTusk(),
+                Calendar.getInstance().getTime(),
+                3600000);
+
         URL pathToFxml =
                 getClass().getResource("/windows/window_main.fxml");
         var loader = new FXMLLoader(pathToFxml);

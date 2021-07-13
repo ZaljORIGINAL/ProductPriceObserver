@@ -15,16 +15,7 @@ public class CitilinkShopEditorFragment extends ProductEditorFragment {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.url.setText(product.getLink());
-        this.name.setText(product.getName());
-        initTimeToTriggerBox();
-
-        checkFields();
-        }
-
-    @Override
     protected ProductProxy getProductProxy(String linkToProduct) throws IOException {
-        return new CitilinkShopProductParser();
+        return new CitilinkShopProductParser(linkToProduct);
     }
 }

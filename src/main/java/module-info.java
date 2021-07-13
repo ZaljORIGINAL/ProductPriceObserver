@@ -8,17 +8,19 @@ module Task2 {
     requires org.jsoup;
 
     opens sample;
-    opens sample.Databases;
-    opens sample.Databases.Contracts;
-    opens sample.Databases.ShopsDatabase;
-    opens sample.Observers;
-    opens sample.Observers.Types;
-    opens sample.Observers.Types.Parsing;
-    opens sample.Products;
     opens sample.Controllers.Windows;
     opens sample.Controllers.Fragments;
     opens sample.Controllers.Fragments.MainWindow.Tables;
     opens sample.Controllers.Fragments.MainWindow.Tables.ProductsTables;
     opens sample.Controllers.Fragments.ProductConstructors;
     opens sample.Controllers.Fragments.ProductEditors;
+    opens sample.Databases;
+    opens sample.Databases.Contracts;
+    opens sample.ProductObserver;
+    opens sample.ShopToolsFactories.Factorys;
+    opens sample.ProductProxys;
+    opens sample.ProductProxys.Parsers;
+    opens sample.ProductProxys.ShopApi;
+    opens sample.Products;
+    opens sample.ShopToolsFactories;
 }

@@ -7,7 +7,8 @@ import sample.Controllers.Fragments.ProductConstructorFragment;
 import sample.Controllers.Fragments.ProductConstructors.CitilinkShopConstructorFragment;
 import sample.Controllers.Fragments.ProductEditorFragment;
 import sample.Controllers.Fragments.ProductEditors.CitilinkShopEditorFragment;
-import sample.Databases.ShopsDatabase.TableCitilinkShop;
+import sample.Databases.Contracts.ProductTableContract;
+import sample.Databases.ProductsTable;
 import sample.Products.ProductProperty;
 
 import java.sql.SQLException;
@@ -17,14 +18,7 @@ public class CitilinkProductTableView extends ProductTableView {
     private TableColumn<ProductProperty, Float> priceColumn;
 
     public CitilinkProductTableView() throws SQLException{
-        tableData = new TableCitilinkShop();
-
-        //Проверка на наличие базы данных
-        tableData.openConnection();
-        if (!tableData.existsTable()){
-            tableData.createTable();
-        }
-        tableData.closeConnection();
+        tableData = new ProductsTable(ProductTableContract.CITILINK_TABLE);
     }
 
     @Override

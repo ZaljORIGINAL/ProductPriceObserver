@@ -22,7 +22,7 @@ public class CitilinkShopProductParser extends ShopProductParser{
     public String getName() {
         Elements elements = document.getElementsByClass("Heading Heading_level_1 ProductHeader__title");
         Element nameElement = elements.first();
-        String nameValue = nameElement.text(); //nameElement.text();
+        String nameValue = nameElement.text();
 
         return nameValue;
     }

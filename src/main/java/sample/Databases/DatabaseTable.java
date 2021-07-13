@@ -2,50 +2,55 @@ package sample.Databases;
 
 import sample.Databases.Contracts.DatabaseContract;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public abstract class DatabaseTable {
-    protected static final String DATABASE_URL =
-            DatabaseContract.DATABASE_URL;
-    protected static final String DATABASE_NAME =
-            DatabaseContract.DATABASE_NAME;
     protected String tableName;
-    protected Connection connection;
 
-    public DatabaseTable() { }
+    public DatabaseTable(String tableName) throws SQLException {
+        this.tableName = tableName;
+
+        if (!existsTable())
+            createTable();
+    }
+
+    public String getTableName(){
+        return tableName;
+    }
+
+    public Connection getConnection() throws SQLException {
+        return open();
+    }
 
     public abstract boolean createTable() throws SQLException;
 
     public boolean deleteTable() throws SQLException{
         String sqlCommand = "DROP TABLE " + tableName;
 
-        PreparedStatement statement = connection.prepareStatement(sqlCommand);
-        return statement.execute();
+        try (var connection = getConnection()){
+            PreparedStatement statement = connection.prepareStatement(sqlCommand);
+            statement.executeUpdate();
+            return !existsTable();
+        }
     }
 
     public boolean existsTable() throws SQLException{
-        DatabaseMetaData metaData = connection.getMetaData();
-        var result = metaData.getTables(
-                null,
-                null,
-                tableName,
-                null);
-        if (result.next())
-            return true;
-        return false;
+        try (var connection = getConnection()) {
+            DatabaseMetaData metaData = connection.getMetaData();
+            var result = metaData.getTables(
+                    null,
+                    null,
+                    tableName,
+                    null);
+            return result.next();
+        }
     }
 
-    public abstract Connection openConnection() throws SQLException;
+    public Connection open() throws SQLException{
+        var connection = DriverManager.getConnection(
+                DatabaseContract.DATABASE_URL +
+                DatabaseContract.DATABASE_NAME);
 
-    public boolean closeConnection() throws SQLException{
-        if (connection != null)
-            connection.close();
-        else
-            return true;
-
-        return connection.isClosed();
+        return connection;
     }
 }

@@ -1,4 +1,4 @@
-package sample.ProductObserver;
+package sample.ShopToolsFactories;
 
 import sample.Databases.ProductsTable;
 import sample.ProductProxys.Parsers.ProductParser;

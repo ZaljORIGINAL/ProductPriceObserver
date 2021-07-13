@@ -3,29 +3,23 @@ package sample.Products;
 import sample.Databases.ProductPricesTable;
 
 import java.sql.SQLException;
-import java.util.Date;
 
 public class Product {
-    private int id;
+    private final int id;
     private String url;
     private String name;
-    private String triggerPeriod;
-    private ProductPricesTable priceTable;
+    private long triggerPeriod;
+    private String priceTableName;
 
-    public Product(int id, String url, String name, String triggerPeriod,String priceTableName){
-        try {
-            this.id = id;
-            this.url = url;
-            this.name = name;
-            this.triggerPeriod = triggerPeriod;
-            priceTable = new ProductPricesTable(priceTableName);
-        }catch (SQLException exception){
-            System.out.println(exception.getMessage());
-            exception.printStackTrace();
-        }
+    public Product(int id, String url, String name, long triggerPeriod, String priceTableName){
+        this.id = id;
+        this.url = url;
+        this.name = name;
+        this.triggerPeriod = triggerPeriod;
+        this.priceTableName = priceTableName;
     }
 
-    public Product(String url, String name, String triggerPeriod){
+    public Product(String url, String name, long triggerPeriod){
         this.id = -1;
         this.url = url;
         this.name = name;
@@ -44,16 +38,12 @@ public class Product {
         return name;
     }
 
-    public String getTableName() {
-        return priceTable.getName();
-    }
-
-    public String getTriggerPeriod() {
+    public long getTriggerPeriod() {
         return triggerPeriod;
     }
 
-    public ProductPricesTable getPriceTable(){
-        return priceTable;
+    public String getPriceTableName(){
+        return priceTableName;
     }
 
     public void setUrl(String url){
@@ -64,11 +54,12 @@ public class Product {
         this.name = name;
     }
 
-    public void setTriggerPeriod(String triggerPeriod) {
+    public void setTriggerPeriod(long triggerPeriod) {
         this.triggerPeriod = triggerPeriod;
     }
 
     public void addPrice(Price price) throws SQLException {
-        priceTable.insert(price);
+        var table = new ProductPricesTable(priceTableName);
+        table.insert(price);
     }
 }

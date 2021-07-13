@@ -2,24 +2,31 @@ package sample.Controllers.Fragments;
 
 import sample.Products.Product;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 public abstract class ProductConstructorFragment extends ProductParamFragment {
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        initTriggerSelectBox();
+    }
+
     @Override
     public Product saveProduct() {
-        String url = this.url.getText();
-        String productName = this.name.getText();
-        String triggerPeriod;
-        switch (timeToTrigger.getSelectionModel().getSelectedItem()){
-            case "1 час":
-                triggerPeriod = "1";
-                break;
+        String url = this.linkField.getText();
+        String productName = this.nameField.getText();
+
+        long triggerPeriod;
+        switch (choiceField.getSelectionModel().getSelectedItem()){
             case "12 час":
-                triggerPeriod = "12";
+                triggerPeriod = 43200000;
                 break;
             case "24 час":
-                triggerPeriod = "24";
+                triggerPeriod = 86400000;
                 break;
             default:
-                triggerPeriod = "-1";
+                triggerPeriod = 3600000;
         }
 
         Product product = new Product(url, productName, triggerPeriod);

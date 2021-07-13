@@ -1,13 +1,14 @@
 package sample.Databases.Contracts;
 
-public class ProductTableContract {
+public abstract class ProductTableContract {
+    //Supported shops
+    public static final String CITILINK_TABLE = "citilink_shop";
+
     public static final String ID_COLUMN = "id";
     public static final String URL_COLUMN = "url";
     public static final String NAME_COLUMN = "name";
-    public static final String PRICE_TABLE_NAME_COLUMN = "nameOfPriceTable";
-    public static final String TRIGGER_PERIOD = "triggerPeriod";
+    public static final String TRIGGER_COLUMN = "trigger";
 
     public static final int MAX_SYMBOL_TO_URL = 250;
-    public static final int MAX_SYMBOL_TO_NAME = 50;
-    public static final int MAX_SYMBOL_TO_PRICE_TABLE_NAME = 100;
+    public static final int MAX_SYMBOL_TO_NAME = 100;
 }

@@ -1,11 +1,10 @@
 package sample.Databases.Contracts;
 
-public class DatabaseContract {
+public abstract class DatabaseContract {
     public static final String DATABASE_URL =
-            "jdbc:sqlserver://" +
-            "laptop-v7k4umas;";
+            "jdbc:postgresql://localhost/";
     public static final String DATABASE_NAME =
-            "ProductPriceObserver";
+            "Task2";
     public static final String USER_NAME = "admin";
     public static final String USER_PASSWORD = "admin";
 }

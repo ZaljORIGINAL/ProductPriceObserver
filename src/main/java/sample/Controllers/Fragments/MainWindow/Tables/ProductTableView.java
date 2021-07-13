@@ -1,12 +1,11 @@
 package sample.Controllers.Fragments.MainWindow.Tables;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Pair;
 import sample.Controllers.Fragments.ProductConstructorFragment;
 import sample.Controllers.Fragments.ProductEditorFragment;
 import sample.Controllers.Fragments.ViewFragment;
+import sample.Databases.ProductPricesTable;
 import sample.Databases.ProductsTable;
 import sample.Products.Price;
 import sample.Products.Product;
@@ -22,7 +21,6 @@ import java.util.ResourceBundle;
 public abstract class ProductTableView extends ViewFragment {
     public TableView<ProductProperty> tableView;
     public Button tableUpdate;
-
     protected ProductsTable tableData;
 
     @Override
@@ -32,30 +30,28 @@ public abstract class ProductTableView extends ViewFragment {
     }
 
     public void updateTable() throws SQLException{
-        ObservableList<ProductProperty> items =
-                FXCollections.observableArrayList();
-        tableData.openConnection();
+        tableUpdate.setDisable(true);
         var products = tableData.getAll();
+        tableView.getItems().clear();
         for (Product product : products) {
             addToViewTable(product);
         }
+        tableUpdate.setDisable(false);
     }
 
+    //TODO При добавлении продукта получить цену
     public void callProductConstructorDialog(){
         Dialog dialog = buildConstructorDialog(
                 getFragmentToConstructor());
         Optional<Pair<String, Product>> result
                 = dialog.showAndWait();
         result.ifPresent(answer->{
-            try {
-                var product = answer.getValue();
-                tableData.openConnection();
-                var rows = tableData.insert(product);
-                tableData.closeConnection();
-
-                if (rows != 0)
+            try{
+                var product = tableData.insert(
+                        answer.getValue());
+                if (product.getId() != -1){
                     addToViewTable(product);
-                //TODO Оповестить "Наблюдателя" о поаявлении новог объекта.
+                }
             }catch (SQLException exception){
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
@@ -74,12 +70,10 @@ public abstract class ProductTableView extends ViewFragment {
         result.ifPresent(answer->{
             try {
                 var product = answer.getValue();
-                tableData.openConnection();
                 var rows = tableData.update(product);
-                tableData.closeConnection();
 
                 if (rows != 0)
-                    updateToViewTableItem(product);
+                    updateItemInViewTable(product);
             }catch (SQLException exception){
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
@@ -100,11 +94,12 @@ public abstract class ProductTableView extends ViewFragment {
         Optional<ButtonType> option = dialog.showAndWait();
         if (option.get() == ButtonType.OK){
             try {
-                tableData.openConnection();
                 var rows = tableData.delete(product);
-                tableData.closeConnection();
 
-                if (rows != 0)
+                var pricesTable = new ProductPricesTable(
+                        product.getPriceTableName());
+                var isDeleted = pricesTable.deleteTable();
+                if (rows != 0 && isDeleted)
                     deleteItemFromViewTable(product);
             }catch (SQLException exception){
                 Alert messageDialog =
@@ -140,7 +135,8 @@ public abstract class ProductTableView extends ViewFragment {
     protected void addToViewTable(Product product){
         ProductProperty productProperty;
         try{
-            var pricesTable = product.getPriceTable();
+            var pricesTableName = product.getPriceTableName();
+            var pricesTable = new ProductPricesTable(pricesTableName);
             var lastPrice = pricesTable.getLastPrice();
             productProperty = new ProductProperty(
                     product,
@@ -160,7 +156,7 @@ public abstract class ProductTableView extends ViewFragment {
         tableView.getItems().add(productProperty);
     }
 
-    protected void updateToViewTableItem(Product product){
+    protected void updateItemInViewTable(Product product){
         List<ProductProperty> productProperties =
                 tableView.getItems();
         for (ProductProperty property:
@@ -168,9 +164,10 @@ public abstract class ProductTableView extends ViewFragment {
             var toComparison = property.getProduct();
             if (product.getId() == toComparison.getId()){
                 Price price;
-                try{
-                    var pricesTable = product.getPriceTable();
-                    price = pricesTable.getLastPrice();
+                try {
+                var pricesTableName = product.getPriceTableName();
+                var pricesTable = new ProductPricesTable(pricesTableName);
+                price = pricesTable.getLastPrice();
                 }catch (SQLException exception){
                     /*TODO Добавить лог об ошибке.
                      *  При ошибке вывести запись о товаре, но в место
@@ -188,13 +185,18 @@ public abstract class ProductTableView extends ViewFragment {
     protected void deleteItemFromViewTable(Product product){
         List<ProductProperty> productProperties =
                 tableView.getItems();
+        ProductProperty productToDelete = null;
         for (ProductProperty property:
                 productProperties) {
             var toComparison = property.getProduct();
             if (product.getId() == toComparison.getId()){
-                productProperties.remove(property);
+                productToDelete = property;
+                break;
             }
         }
+
+        if (productToDelete != null)
+            productProperties.remove(productToDelete);
     }
 
     protected Dialog buildConstructorDialog(ProductConstructorFragment fragment){
@@ -228,11 +230,9 @@ public abstract class ProductTableView extends ViewFragment {
                     return answer;
                 }
             }
-
-            //Ну тут хз
             return null;
         });
-        return null;
+        return dialog;
     }
 
     protected Dialog buildEditorDialog(ProductEditorFragment fragment){
@@ -266,10 +266,9 @@ public abstract class ProductTableView extends ViewFragment {
                 }
             }
 
-            //Ну тут хз
             return null;
         });
-        return null;
+        return dialog;
     }
 
     protected Dialog buildDeleteDialog(Product product){

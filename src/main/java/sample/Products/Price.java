@@ -24,7 +24,7 @@ public class Price {
         return id;
     }
 
-    public Calendar getDate() {
+    public Calendar getCalendar() {
         return date;
     }
 

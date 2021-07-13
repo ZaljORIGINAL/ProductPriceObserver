@@ -11,9 +11,9 @@ import sample.Products.Product;
 import java.io.IOException;
 
 public abstract class ProductParamFragment extends ViewFragment {
-    public TextField url;
-    public TextField name;
-    public ChoiceBox<String> timeToTrigger;
+    public TextField linkField;
+    public TextField nameField;
+    public ChoiceBox<String> choiceField;
 
     @Override
     public String getPathToFXML() {
@@ -21,29 +21,31 @@ public abstract class ProductParamFragment extends ViewFragment {
         return pathToFxml;
     }
 
+    //TODO Если имя не было введено, то прописать автоматически, НО НЕ СОХРАНЯТЬ.
+    // продемонстрировать пользоватлю вставленное имя для его редактирования.
     public boolean checkFields(){
         var answer = true;
 
         var productProxy = checkUrlField();
         if (productProxy != null){
-                url.setStyle("-fx-background-color: #c1ffb2");
+                linkField.setStyle("-fx-background-color: #c1ffb2");
 
             if (checkNameField(productProxy)){
-                name.setStyle("-fx-background-color: #c1ffb2");
+                nameField.setStyle("-fx-background-color: #c1ffb2");
             }else {
                 answer = false;
-                name.setStyle("-fx-background-color: #FDB7B7;");
+                nameField.setStyle("-fx-background-color: #FDB7B7;");
             }
             if (checkTriggerField()){
-                timeToTrigger.setStyle("-fx-background-color: #c1ffb2");
+                choiceField.setStyle("-fx-background-color: #c1ffb2");
             }else {
                 answer = false;
-                timeToTrigger.setStyle("-fx-background-color: #FDB7B7;");
+                choiceField.setStyle("-fx-background-color: #FDB7B7;");
             }
 
             return answer;
         }else {
-            url.setStyle("-fx-background-color: #FDB7B7;");
+            linkField.setStyle("-fx-background-color: #FDB7B7;");
             return false;
         }
     }
@@ -52,7 +54,7 @@ public abstract class ProductParamFragment extends ViewFragment {
 
     protected abstract ProductProxy getProductProxy(String linkToProduct) throws IOException;
 
-    protected void initTimeToTriggerBox(){
+    protected void initTriggerSelectBox(){
         String[] rows = new String[]{
                 "1 час",
                 "12 час",
@@ -60,11 +62,12 @@ public abstract class ProductParamFragment extends ViewFragment {
         };
         ObservableList<String> items =
                 FXCollections.observableArrayList(rows);
-        timeToTrigger.setItems(items);
+        choiceField.setItems(items);
+        choiceField.setValue(rows[0]);
     }
 
     protected ProductProxy checkUrlField(){
-        String linkToProduct = url.getText();
+        String linkToProduct = linkField.getText();
         linkToProduct = StringUtils.trimAllWhitespace(linkToProduct);
         if (StringUtils.hasText(linkToProduct)) {
             try {
@@ -74,19 +77,18 @@ public abstract class ProductParamFragment extends ViewFragment {
                 return null;
             }
         }else{
-            timeToTrigger.setStyle("-fx-background-color: #FDB7B7;");
+            choiceField.setStyle("-fx-background-color: #FDB7B7;");
             return null;
         }
     }
 
     protected boolean checkNameField(ProductProxy productProxy){
-        String productName = name.getText();
-        productName = StringUtils.trimAllWhitespace(productName);
+        String productName = nameField.getText();
         if (StringUtils.hasText(productName)) {
-            name.setText(productName);
+            nameField.setText(productName);
         } else {
             String nameFromPage = productProxy.getName();
-            name.setText(nameFromPage);
+            nameField.setText(nameFromPage);
         }
 
         return true;
