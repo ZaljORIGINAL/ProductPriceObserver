@@ -40,7 +40,6 @@ public class MainWindow implements Initializable {
     }
 
     private void initAddNewProductButton(){
-        addNewProduct.setDisable(true);
         addNewProduct.setOnAction(actionEvent -> clickAddNewProduct());
     }
 
@@ -80,11 +79,9 @@ public class MainWindow implements Initializable {
         table.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldSelection, newSelection) -> {
                     if (newSelection != null){
-                        addNewProduct.setDisable(false);
                         getMoreInfo.setDisable(false);
                         deleteProduct.setDisable(false);
                     }else{
-                        addNewProduct.setDisable(true);
                         getMoreInfo.setDisable(true);
                         deleteProduct.setDisable(true);
                     }
