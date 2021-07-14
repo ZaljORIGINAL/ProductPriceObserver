@@ -13,12 +13,11 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
-    public ChoiceBox shopChoice;
+    public ChoiceBox<String> shopChoice;
     public Pane tablePanel;
     public Button addNewProduct;
     public Button getMoreInfo;
     public Button deleteProduct;
-    public Button programSettings;
     private ProductTableView productViewTable;
 
     @Override
@@ -28,7 +27,6 @@ public class MainWindow implements Initializable {
         initAddNewProductButton();
         initGetMoreInfoButton();
         initDeleteProductButton();
-        initProgramSettings();
     }
 
     private void initShopChoice() {
@@ -42,19 +40,18 @@ public class MainWindow implements Initializable {
     }
 
     private void initAddNewProductButton(){
+        addNewProduct.setDisable(true);
         addNewProduct.setOnAction(actionEvent -> clickAddNewProduct());
     }
 
     private void initGetMoreInfoButton(){
+        getMoreInfo.setDisable(true);
         getMoreInfo.setOnAction(actionEvent -> clickShowInfoAbout());
     }
 
     private void initDeleteProductButton(){
+        deleteProduct.setDisable(true);
         deleteProduct.setOnAction(actionEvent -> clickDeleteProduct());
-    }
-
-    private void initProgramSettings(){
-        programSettings.setOnAction(actionEvent -> clickOpenSettings());
     }
 
     private void switchTableView(){
@@ -78,6 +75,20 @@ public class MainWindow implements Initializable {
         var children = tablePanel.getChildren();
         children.clear();
         children.add(productViewTable.getMainPanel());
+
+        var table = productViewTable.tableView;
+        table.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> {
+                    if (newSelection != null){
+                        addNewProduct.setDisable(false);
+                        getMoreInfo.setDisable(false);
+                        deleteProduct.setDisable(false);
+                    }else{
+                        addNewProduct.setDisable(true);
+                        getMoreInfo.setDisable(true);
+                        deleteProduct.setDisable(true);
+                    }
+                });
     }
 
     private void clickAddNewProduct(){
@@ -90,8 +101,5 @@ public class MainWindow implements Initializable {
 
     private void clickDeleteProduct() {
         productViewTable.callProductDeleteDialog();
-    }
-
-    private void clickOpenSettings() {
     }
 }
