@@ -6,6 +6,8 @@ module Task2 {
     requires spring.context;
     requires java.sql;
     requires org.jsoup;
+    requires org.apache.logging.log4j;
+    requires org.apache.logging.log4j.core;
 
     opens sample;
     opens sample.Controllers.Windows;
