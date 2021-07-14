@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import sample.ProductObserver.TriggerTusk;
 
@@ -13,10 +15,17 @@ import java.util.Calendar;
 import java.util.Timer;
 
 public class Main extends Application {
-    private ApplicationContext context;
+    private static final Logger logger = LogManager.getLogger(Main.class);
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+        //https://sematext.com/blog/log4j2-tutorial/#toc-log4j-2-configuration-1
+        for (int i = 0; i < 100000; i++){
+            logger.info("Info");
+            logger.warn("Warn");
+            logger.error("Error");
+        }
+
         Timer timer = new Timer();
         timer.schedule(
                 new TriggerTusk(),
