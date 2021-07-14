@@ -18,30 +18,31 @@ public class PriceObserver {
         this.period = period;
     }
 
-    public void check(ProductToolsFactory tools, CountDownLatch finishSignal){
-        try {
-            var table = tools.getProductsTable();
-            List<Product> products = table.getAll();
-            var runnable = getRunnable(products, tools, finishSignal);
-            new Thread(runnable).start();
-        }catch (SQLException exception){
-            //TODO Надо бы узнать какая именно ошибка.
-        }
+    public void check(List<ProductToolsFactory> toolsFactories){
+        var runnable = getRunnable(toolsFactories);
+        new Thread(runnable).start();
     }
 
-    private Runnable getRunnable(List<Product> products, ProductToolsFactory tools, CountDownLatch finishSignal){
+    private Runnable getRunnable(List<ProductToolsFactory> toolsFactories){
         return () -> {
-            for (Product product: products) {
+            for (ProductToolsFactory toolsFactory : toolsFactories) {
                 try {
-                    var priceTableName = product.getPriceTableName();
-                    var priceTable = new ProductPricesTable(priceTableName);
-                    ProductProxy productProxy = tools.getParser(
-                            product.getLink());
-                    var price = productProxy.getPrice();
-                    priceTable.insert(price);
-                    finishSignal.countDown();
-                }catch (IOException | SQLException exception){
-                    //TODO Прописать лог по записи информации о ошибка
+                    var productTable = toolsFactory.getProductsTable();
+                    var products = productTable.getByTrigger(period);
+                    for (Product product : products) {
+                        try {
+                            var priceTableName = product.getPriceTableName();
+                            var priceTable = new ProductPricesTable(priceTableName);
+                            ProductProxy productProxy = toolsFactory.getParser(
+                                    product.getLink());
+                            var price = productProxy.getPrice();
+                            priceTable.insert(price);
+                        }catch (SQLException | IOException exception){
+                            //TODO Записать лог об ошибке
+                        }
+                    }
+                }catch (SQLException exception){
+                    //TODO Записать лог об ошибке
                 }
             }
         };

@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class TriggerTusk extends TimerTask {
     @Override
@@ -15,37 +17,20 @@ public class TriggerTusk extends TimerTask {
         Calendar calendar = Calendar.getInstance();
         var hour24 = calendar.get(Calendar.HOUR_OF_DAY);
 
-        List<ProductToolsFactory> ProductTools = getToolsFactories();
-        List<PriceObserver> priceObservers = new ArrayList<>();
+        List<ProductToolsFactory> toolsFactory = getToolsFactories();
 
-
-        priceObservers.add(new PriceObserver(3600000));
+        var observer1Hour = new PriceObserver(3600000);
+        observer1Hour.check(toolsFactory);
 
         if (hour24%12 == 0){
-            priceObservers.add(new PriceObserver(43200000));
+            var observer12Hour = new PriceObserver(43200000);
+            observer12Hour.check(toolsFactory);
         }
 
         if (hour24%24 == 0){
-            priceObservers.add(new PriceObserver(86400000));
+            var observer24Hour = new PriceObserver(86400000);
+            observer24Hour.check(toolsFactory);
         }
-
-        for (ProductToolsFactory tools: ProductTools) {
-            /* Источник:
-            *   https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CountDownLatch.html
-            *   https://pro-java.ru/parallelizm-v-java/klass-countdownlatch-primery-realizacii-koda-v-java/
-            */
-            try{
-                CountDownLatch finishSignal =
-                        new CountDownLatch(priceObservers.size());
-                for (PriceObserver priceObserver: priceObservers) {
-                    priceObserver.check(tools, finishSignal);
-                }
-                finishSignal.await();
-            }catch (InterruptedException exception){
-                //TODO Прописать лог
-            }
-        }
-
     }
 
     private List<ProductToolsFactory> getToolsFactories(){

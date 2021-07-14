@@ -60,6 +60,26 @@ public class ProductsTable extends DatabaseTable {
         return products;
     }
 
+    public List<Product> getByTrigger(long triggerTime) throws SQLException{
+        String sqlCommand = "SELECT * FROM " +
+                tableName + " " +
+                "WHERE " +
+                ProductTableContract.TRIGGER_COLUMN + " = ?";
+        try (var connection = getConnection()){
+            try (var statement = connection.prepareStatement(sqlCommand)){
+                try (var result = statement.executeQuery()){
+                    List<Product> answer = new ArrayList<>();
+                    while (result.next()){
+                        var product = extractToProduct(result);
+                        answer.add(product);
+                    }
+
+                    return answer;
+                }
+            }
+        }
+    }
+
     public List<Product> getAll() throws SQLException{
         try (var connection = getConnection()){
             String sqlCommand = "SELECT * FROM " +
