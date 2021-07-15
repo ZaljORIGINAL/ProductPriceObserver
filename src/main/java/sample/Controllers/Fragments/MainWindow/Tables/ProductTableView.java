@@ -1,6 +1,7 @@
 package sample.Controllers.Fragments.MainWindow.Tables;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +22,6 @@ import java.util.ResourceBundle;
 
 public abstract class ProductTableView extends ViewFragment {
     private static final Logger logger = LogManager.getLogger(ProductTableView.class);
-
     public TableView<ActualProduct> tableView;
     public Button tableUpdate;
     protected ProductsTable tableData;
@@ -109,6 +109,7 @@ public abstract class ProductTableView extends ViewFragment {
                     logger.warn("Неудалось зарегестрировать продукт в системе.");
                 }
             }catch (SQLException exception){
+                logger.error("Ошибка при сохранении нового продукта.", exception);
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
                 messageDialog.setTitle("Ошибка");
@@ -180,6 +181,7 @@ public abstract class ProductTableView extends ViewFragment {
                 }else
                     logger.warn("Ошибка в удалении таблици цен продукта.");
             }catch (SQLException exception){
+                logger.error("Ошибка при удалении продукта.", exception);
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
                 messageDialog.setTitle("Ошибка");

@@ -1,5 +1,7 @@
 package sample.Databases;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sample.Databases.Contracts.ProductPricesContract;
 import sample.Products.Price;
 
@@ -9,6 +11,8 @@ import java.util.Calendar;
 import java.util.List;
 
 public class ProductPricesTable extends DatabaseTable {
+    protected static final Logger logger = LogManager.getLogger(ProductPricesTable.class);
+
     public ProductPricesTable(String tableName) throws SQLException {
         super(tableName);
     }
@@ -23,7 +27,6 @@ public class ProductPricesTable extends DatabaseTable {
                     ProductPricesContract.DATE_COLUMN + " TIMESTAMP NOT NULL, " +
                     ProductPricesContract.PRICE_COLUMN + " NUMERIC NOT NULL " +
                     ")";
-
             try(var statement =
                         connection.prepareStatement(sqlCommand)){
                 return statement.execute();
@@ -68,16 +71,6 @@ public class ProductPricesTable extends DatabaseTable {
         }
     }
 
-    public ArrayList<Price> getById(ArrayList<Integer> ids) throws SQLException{
-        ArrayList<Price> prices = new ArrayList<>();
-        for (Integer id : ids) {
-            var price = getById(id);
-            prices.add(price);
-        }
-
-        return prices;
-    }
-
     public Price insert(Price price) throws SQLException{
         try (var connection = getConnection()){
             String sqlCommand = "INSERT INTO " +
@@ -98,16 +91,6 @@ public class ProductPricesTable extends DatabaseTable {
                 }
             }
         }
-    }
-
-    public List<Price> insert(ArrayList<Price> prices) throws SQLException{
-        List<Price> inserted = new ArrayList<>();
-        for (Price price : prices) {
-            var result = insert(price);
-            inserted.add(result);
-        }
-
-        return inserted;
     }
 
     public Price getLastPrice() throws SQLException{

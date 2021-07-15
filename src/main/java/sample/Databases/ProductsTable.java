@@ -50,16 +50,6 @@ public class ProductsTable extends DatabaseTable {
         }
     }
 
-    public List<Product> getById(List<Integer> ids) throws SQLException{
-        ArrayList<Product> products = new ArrayList<>();
-        for (Integer id : ids) {
-            var product = getById(id);
-            products.add(product);
-        }
-
-        return products;
-    }
-
     public List<Product> getByTrigger(long triggerTime) throws SQLException{
         String sqlCommand = "SELECT * FROM " +
                 tableName + " " +
@@ -133,16 +123,6 @@ public class ProductsTable extends DatabaseTable {
         }
     }
 
-    public List<Product> insert(List<Product> products) throws SQLException{
-        List<Product> inserted = new ArrayList<>();
-        for (Product product : products) {
-            var result = insert(product);
-            inserted.add(result);
-        }
-
-        return inserted;
-    }
-
     public int update(Product product) throws SQLException{
         try (var connection = getConnection()){
             String sqlCommand = "UPDATE " +
@@ -165,16 +145,6 @@ public class ProductsTable extends DatabaseTable {
         }
     }
 
-    public int update(List<Product> products) throws SQLException{
-        int changedRows = 0;
-        for (Product product : products){
-            int answer = update(product);
-            changedRows += answer;
-        }
-
-        return  changedRows;
-    }
-
     public int delete(int id) throws SQLException{
         try (var connection = getConnection()){
             String sqlCommand = "DELETE FROM " +
@@ -188,28 +158,8 @@ public class ProductsTable extends DatabaseTable {
         }
     }
 
-    public int delete(int[] ids) throws SQLException{
-        int changedRows = 0;
-        for (int id : ids) {
-            int answer = delete(id);
-            changedRows += answer;
-        }
-
-        return changedRows;
-    }
-
     public int delete(Product product) throws SQLException{
         return delete(product.getId());
-    }
-
-    public int delete(ArrayList<Product> products) throws SQLException{
-        int changedRows = 0;
-        for (Product product : products) {
-            int answer = delete(product);
-            changedRows += answer;
-        }
-
-        return changedRows;
     }
 
     protected Product extractToProduct(ResultSet result) throws SQLException{

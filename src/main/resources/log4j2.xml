@@ -4,16 +4,16 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t \n %C{1}:  %msg %n"/>
+            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
         </Console>
         <RollingFile name="File"
-              fileName="logs/AppLog.log"
-              filePattern="logs/$${dd MMM yyyy HH:mm:ss,SSS}-%i.log.gz" append="true">
-            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t \n %C{1}:  %msg %n"/>
+              fileName="appСache/logs/AppLog.log"
+              filePattern="appСache/logs/$${dd MMM yyyy HH:mm:ss,SSS}-%i.log.gz" append="true">
+            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
             <Policies>
-                <!--TODO Неработает граница по лимиту. В каталоге логов все так же 1 фаил.-->
-                <SizeBasedTriggeringPolicy size="100 MB"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
+            <DefaultRolloverStrategy max="5"/>
         </RollingFile>
     </Appenders>
     <Loggers>

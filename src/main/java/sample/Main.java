@@ -13,10 +13,8 @@ import sample.ProductObserver.TriggerTusk;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class Main extends Application {
     private static final Logger logger = LogManager.getLogger(Main.class);
@@ -32,14 +30,22 @@ public class Main extends Application {
                 .setNameFormat("Задача обновления цен-%d")
                 .build();
         ScheduledExecutorService executorService =
-                Executors.newSingleThreadScheduledExecutor(threadFactory);
+                new ScheduledThreadPoolExecutor(3, threadFactory);
         executorService.scheduleAtFixedRate(
-                ()-> {
-                    new Thread(new TriggerTusk()).start();
-                },
+                ()-> new Thread(new TriggerTusk()).start(),
                 0,
                 1,
                 TimeUnit.HOURS);
+/*        executorService.scheduleAtFixedRate(
+                ()-> new Thread(new TriggerTusk()).start(),
+                0,
+                1,
+                TimeUnit.HOURS);
+        executorService.scheduleAtFixedRate(
+                ()-> new Thread(new TriggerTusk()).start(),
+                0,
+                1,
+                TimeUnit.HOURS);*/
         logger.info("Установлен таймер на обновления цен товаров.");
 
         try {

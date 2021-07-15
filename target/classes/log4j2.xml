@@ -11,9 +11,9 @@
               filePattern="logs/$${dd MMM yyyy HH:mm:ss,SSS}-%i.log.gz" append="true">
             <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t \n %C{1}:  %msg %n"/>
             <Policies>
-                <!--TODO Неработает граница по лимиту. В каталоге логов все так же 1 фаил.-->
                 <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
+            <DefaultRolloverStrategy max="5"/>
         </RollingFile>
     </Appenders>
     <Loggers>
