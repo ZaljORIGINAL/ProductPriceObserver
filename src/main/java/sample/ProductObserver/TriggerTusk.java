@@ -1,5 +1,7 @@
 package sample.ProductObserver;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sample.ShopToolsFactories.Factorys.CitilinkShopToolsFactory;
 import sample.ShopToolsFactories.ProductToolsFactory;
 
@@ -12,12 +14,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 public class TriggerTusk extends TimerTask {
+    public static final Logger logger = LogManager.getLogger(TriggerTusk.class);
+
     @Override
     public void run() {
+        logger.info("Запуск задачи обновления цен продуктов!");
         Calendar calendar = Calendar.getInstance();
         var hour24 = calendar.get(Calendar.HOUR_OF_DAY);
 
         List<ProductToolsFactory> toolsFactory = getToolsFactories();
+        logger.info("Количество магазинов на обработку: " + toolsFactory.size());
 
         var observer1Hour = new PriceObserver(3600000);
         observer1Hour.check(toolsFactory);

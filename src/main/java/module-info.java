@@ -8,6 +8,7 @@ module Task2 {
     requires org.jsoup;
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
+    requires com.google.common;
 
     opens sample;
     opens sample.Controllers.Windows;

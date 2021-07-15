@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sematext.com/blog/log4j2-tutorial/#toc-log4j-2-configuration-1 -->
 <!-- PatternLayout symbol https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html -->
 <Configuration status="INFO">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t \n %C{1}:  %msg %n"/>
         </Console>
-        <File name="File"
+        <RollingFile name="File"
               fileName="logs/AppLog.log"
               filePattern="logs/$${dd MMM yyyy HH:mm:ss,SSS}-%i.log.gz" append="true">
             <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t \n %C{1}:  %msg %n"/>
             <Policies>
-                <SizeBasedTriggeringPolicy size="5 MB"/>
+                <!--TODO Неработает граница по лимиту. В каталоге логов все так же 1 фаил.-->
+                <SizeBasedTriggeringPolicy size="100 MB"/>
             </Policies>
-        </File>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="INFO">

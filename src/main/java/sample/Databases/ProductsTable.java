@@ -67,6 +67,7 @@ public class ProductsTable extends DatabaseTable {
                 ProductTableContract.TRIGGER_COLUMN + " = ?";
         try (var connection = getConnection()){
             try (var statement = connection.prepareStatement(sqlCommand)){
+                statement.setLong(1, triggerTime);
                 try (var result = statement.executeQuery()){
                     List<Product> answer = new ArrayList<>();
                     while (result.next()){
