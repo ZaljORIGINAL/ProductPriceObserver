@@ -1,5 +1,6 @@
 package sample.Controllers.Fragments.MainWindow.Tables;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.util.Pair;
 import sample.Controllers.Fragments.ProductConstructorFragment;
@@ -23,10 +24,18 @@ public abstract class ProductTableView extends ViewFragment {
     public Button tableUpdate;
     protected ProductsTable tableData;
 
+    private TableColumn<ActualProduct, String> nameColumn;
+    private TableColumn<ActualProduct, String> priceColumn;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTableUpdateButton();
         initTableView();
+    }
+
+    @Override
+    public String getPathToFXML() {
+        return "/fragments/fragment_TableView_OneShop.fxml";
     }
 
     public void updateTable() throws SQLException{
@@ -142,7 +151,28 @@ public abstract class ProductTableView extends ViewFragment {
         });
     }
 
-    protected abstract void initTableView();
+    protected void initTableView() {
+        nameColumn = new TableColumn<>("Товар");
+        nameColumn.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getProduct().getName()));
+        tableView.getColumns().add(nameColumn);
+
+        priceColumn = new TableColumn<>("Последняя цена");
+        priceColumn.setCellValueFactory(c ->
+                new SimpleStringProperty(String.valueOf(c.getValue().getPrice().getPrice())));
+        tableView.getColumns().add(priceColumn);
+
+        try {
+            updateTable();
+        }catch (SQLException exception){
+            tableView.getItems().clear();
+            Alert messageDialog =
+                    new Alert(Alert.AlertType.ERROR);
+            messageDialog.setTitle("Ошибка");
+            messageDialog.setHeaderText("Ошибка при работе с базой данных");
+            messageDialog.setContentText(exception.getMessage());
+        }
+    }
 
     protected abstract ProductConstructorFragment getFragmentToConstructor();
 
