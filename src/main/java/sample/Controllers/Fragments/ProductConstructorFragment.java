@@ -11,6 +11,10 @@ import java.util.ResourceBundle;
 public abstract class ProductConstructorFragment extends ProductParamFragment {
     protected static final Logger logger = LogManager.getLogger(ProductConstructorFragment.class);
 
+    public ProductConstructorFragment(){
+        logger.info("Создан объект фрагмента редактора продукта.");
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initView();

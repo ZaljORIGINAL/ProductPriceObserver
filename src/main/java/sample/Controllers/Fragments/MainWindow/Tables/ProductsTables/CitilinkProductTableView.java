@@ -3,6 +3,8 @@ package sample.Controllers.Fragments.MainWindow.Tables.ProductsTables;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductTableView;
 import sample.Controllers.Fragments.ProductConstructorFragment;
 import sample.Controllers.Fragments.ProductConstructors.CitilinkShopConstructorFragment;
@@ -15,9 +17,11 @@ import sample.Products.ActualProduct;
 import java.sql.SQLException;
 
 public class CitilinkProductTableView extends ProductTableView {
+    private static final Logger logger = LogManager.getLogger(CitilinkProductTableView.class);
 
     public CitilinkProductTableView() throws SQLException{
         tableData = new ProductsTable(ProductTableContract.CITILINK_TABLE);
+        logger.info("Создан объект графического представления таблици.");
     }
 
     @Override

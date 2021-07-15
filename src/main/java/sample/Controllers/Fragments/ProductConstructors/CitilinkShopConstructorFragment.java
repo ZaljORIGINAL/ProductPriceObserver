@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 public class CitilinkShopConstructorFragment extends ProductConstructorFragment {
     public CitilinkShopConstructorFragment(){
+        super();
     }
 
     @Override
