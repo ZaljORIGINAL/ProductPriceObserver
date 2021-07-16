@@ -16,19 +16,23 @@ public class CitilinkShopProductParser extends ShopProductParser{
 
     public CitilinkShopProductParser(String linkToProduct) throws IOException {
         super(linkToProduct);
+        logger.info("Создан экземпляр класса.");
     }
 
     @Override
     public String getName() {
+        logger.info("Чтение наименования продукта с сайта...");
         Elements elements = document.getElementsByClass("Heading Heading_level_1 ProductHeader__title");
         Element nameElement = elements.first();
         String nameValue = nameElement.text();
 
+        logger.info("Полученное наименование продукта с ссайта: " + nameValue);
         return nameValue;
     }
 
     @Override
     public Price getPrice() {
+        logger.info("Чтение цены продукта с сайта...");
         Elements elements = document.getElementsByClass("ProductHeader__price-default_current-price ");
         Element priceElement = elements.first();
         String priceValue = priceElement.text();
@@ -38,6 +42,7 @@ public class CitilinkShopProductParser extends ShopProductParser{
                 Calendar.getInstance(),
                 Float.parseFloat(priceValue));
 
+        logger.info("Полученная цена продукта с ссайта: " + priceValue);
         return price;
     }
 }
