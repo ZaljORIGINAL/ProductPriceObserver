@@ -15,6 +15,7 @@ public class ProductsTable extends DatabaseTable {
 
     @Override
     public boolean createTable() throws SQLException {
+        logger.info("Запрос на создание таблици продуктов...");
         try (var connection = getConnection()){
             String sqlCommand = "CREATE TABLE " +
                     tableName + " " +
@@ -25,6 +26,7 @@ public class ProductsTable extends DatabaseTable {
                     ProductTableContract.TRIGGER_COLUMN + " BIGINT NOT NULL" +
                     ")";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try(var statement =
                         connection.prepareStatement(sqlCommand)){
                 return statement.execute();
@@ -33,10 +35,12 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public Product getById(int id) throws SQLException{
+        logger.info("Запрос на получение элемента из таблици: " + id);
         try(var connection = getConnection()){
             var sqlCommand = "SELECT * FROM " +
                     tableName + " WHERE " + ProductTableContract.ID_COLUMN + "=?";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement =
                          connection.prepareStatement(sqlCommand)) {
                 statement.setInt(1, id);
@@ -45,16 +49,26 @@ public class ProductsTable extends DatabaseTable {
                 Product product = null;
                 if (result.next())
                     product = extractToProduct(result);
-                return product;
+
+                if (product != null){
+                    logger.info("Найдена соответсвующая запись: " + product);
+                    return product;
+                }else {
+                    logger.info("Запись не найдена!");
+                    return product;
+                }
             }
         }
     }
 
     public List<Product> getByTrigger(long triggerTime) throws SQLException{
+        logger.info("Запрос на получение записей по триггеру: " + triggerTime);
         String sqlCommand = "SELECT * FROM " +
                 tableName + " " +
                 "WHERE " +
                 ProductTableContract.TRIGGER_COLUMN + " = ?";
+
+        logger.info("Конструкция запроса: " + sqlCommand);
         try (var connection = getConnection()){
             try (var statement = connection.prepareStatement(sqlCommand)){
                 statement.setLong(1, triggerTime);
@@ -65,6 +79,7 @@ public class ProductsTable extends DatabaseTable {
                         answer.add(product);
                     }
 
+                    logger.info("Количество полученных записей: " + answer.size());
                     return answer;
                 }
             }
@@ -72,9 +87,11 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public List<Product> getAll() throws SQLException{
+        logger.info("Запрос на получение всех элементов таблици");
         try (var connection = getConnection()){
             String sqlCommand = "SELECT * FROM " +
                     tableName +" ";
+            logger.info("Конструкция запроса: " + sqlCommand);
             try(var statement =
                         connection.prepareStatement(sqlCommand)) {
                 try (var result = statement.executeQuery()) {
@@ -85,6 +102,7 @@ public class ProductsTable extends DatabaseTable {
                         products.add(product);
                     }
 
+                    logger.info("Количество полученных записей: " + products.size());
                     return products;
                 }
             }
@@ -92,6 +110,7 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public Product insert(Product product) throws SQLException{
+        logger.info("Запрос на получение всех элементов таблици");
         try (var connection = getConnection()){
             String sqlCommand = "INSERT INTO " +
                     tableName + " " +
@@ -103,6 +122,7 @@ public class ProductsTable extends DatabaseTable {
                     "VALUES (?, ?, ?) " +
                     "RETURNING  " + ProductTableContract.ID_COLUMN;
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement = connection.prepareStatement(sqlCommand)) {
                 statement.setString(1, product.getLink());
                 statement.setString(2, product.getName());
@@ -124,6 +144,7 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public int update(Product product) throws SQLException{
+        logger.info("Запрос на обнавление записи. id записи: " + product.getId());
         try (var connection = getConnection()){
             String sqlCommand = "UPDATE " +
                     tableName  + " " +
@@ -134,6 +155,7 @@ public class ProductsTable extends DatabaseTable {
                     "WHERE " +
                     ProductTableContract.ID_COLUMN + " = ?";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement = connection.prepareStatement(sqlCommand)) {
                 statement.setString(1, product.getLink());
                 statement.setString(2, product.getName());
@@ -146,12 +168,14 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public int delete(int id) throws SQLException{
+        logger.info("Запрос на удаление записи. id записи: " + id);
         try (var connection = getConnection()){
             String sqlCommand = "DELETE FROM " +
                     tableName + " " +
                     "WHERE " +
                     ProductTableContract.ID_COLUMN + " = ?";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             PreparedStatement statement = connection.prepareStatement(sqlCommand);
             statement.setInt(1, id);
             return statement.executeUpdate();

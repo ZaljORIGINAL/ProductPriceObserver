@@ -34,6 +34,7 @@ public abstract class DatabaseTable {
         logger.info("Удаление таблици: " + tableName +"...");
         String sqlCommand = "DROP TABLE " + tableName;
 
+        logger.info("Конструкция запроса: " + sqlCommand);
         try (var connection = getConnection()){
             PreparedStatement statement = connection.prepareStatement(sqlCommand);
             statement.executeUpdate();

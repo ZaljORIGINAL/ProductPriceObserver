@@ -19,6 +19,7 @@ public class ProductPricesTable extends DatabaseTable {
 
     @Override
     public boolean createTable() throws SQLException {
+        logger.info("Запрос на создание таблици цен...");
         try (var connection = getConnection()){
             String sqlCommand = "CREATE TABLE " +
                     tableName + " " +
@@ -27,6 +28,8 @@ public class ProductPricesTable extends DatabaseTable {
                     ProductPricesContract.DATE_COLUMN + " TIMESTAMP NOT NULL, " +
                     ProductPricesContract.PRICE_COLUMN + " NUMERIC NOT NULL " +
                     ")";
+
+            logger.info("Конструкция запроса: " + sqlCommand);
             try(var statement =
                         connection.prepareStatement(sqlCommand)){
                 return statement.execute();
@@ -35,17 +38,22 @@ public class ProductPricesTable extends DatabaseTable {
     }
 
     public List<Price> getAll() throws SQLException{
+        logger.info("Запрос на получение всех элементов таблици");
         try (var connection = getConnection()){
-            String sqlConnection = "SELECT * FROM " +
+            String sqlCommand = "SELECT * FROM " +
                     tableName + " ";
+
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement =
-                    connection.prepareStatement(sqlConnection)){
+                    connection.prepareStatement(sqlCommand)){
                 try (var result = statement.executeQuery()){
                     List<Price> answer = new ArrayList<>();
                     while (result.next()){
                         var price = extractToPrice(result);
                         answer.add(price);
                     }
+
+                    logger.info("Количество полученных записей: " + answer.size());
                     return answer;
                 }
             }
@@ -53,10 +61,12 @@ public class ProductPricesTable extends DatabaseTable {
     }
 
     public Price getById(int id) throws SQLException{
+        logger.info("Запрос на получение элемента из таблици: " + id);
         try (var connection = getConnection()){
             var sqlCommand = "SELECT * FROM " +
                     tableName + " ";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement =
                          connection.prepareStatement(sqlCommand)) {
                 try (var result = statement.executeQuery()) {
@@ -65,13 +75,20 @@ public class ProductPricesTable extends DatabaseTable {
                     if (result.next())
                         price = extractToPrice(result);
 
-                    return price;
+                    if (price != null){
+                        logger.info("Найдена соответсвующая запись: " + price);
+                        return price;
+                    }else {
+                        logger.info("Запись не найдена!");
+                        return price;
+                    }
                 }
             }
         }
     }
 
     public Price insert(Price price) throws SQLException{
+        logger.info("Запрос на добавление записи о цене...");
         try (var connection = getConnection()){
             String sqlCommand = "INSERT INTO " +
                     tableName + " " +
@@ -80,6 +97,7 @@ public class ProductPricesTable extends DatabaseTable {
                     ProductPricesContract.PRICE_COLUMN + ") " +
                     "VALUES (?, ?) RETURNING " + ProductPricesContract.ID_COLUMN;
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement = connection.prepareStatement(sqlCommand) ) {
                 Timestamp time = new java.sql.Timestamp(price.getCalendar().getTimeInMillis());
                 statement.setTimestamp(1, time);
@@ -87,6 +105,7 @@ public class ProductPricesTable extends DatabaseTable {
                 try (var result = statement.executeQuery()){
                     result.next();
                     var id = result.getInt(ProductPricesContract.ID_COLUMN);
+
                     return new Price(id, price.getCalendar(), price.getPrice());
                 }
             }
@@ -94,6 +113,7 @@ public class ProductPricesTable extends DatabaseTable {
     }
 
     public Price getLastPrice() throws SQLException{
+        logger.info("Запрос на получение последней цены...");
         try (var connection = getConnection()){
             String sqlCommand = "SELECT * FROM " +
                     tableName + " " +
@@ -102,6 +122,7 @@ public class ProductPricesTable extends DatabaseTable {
                     tableName + " " +
                     ")";
 
+            logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement =
                          connection.prepareStatement(sqlCommand)) {
                 ResultSet result = statement.executeQuery();
