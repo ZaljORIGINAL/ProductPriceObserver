@@ -1,27 +1,33 @@
 package sample.Products;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Price {
-    private int id;
-    private Calendar date;
-    private float price;
+    private final int idPrice;
+    private final int idProduct;
+    private final Calendar date;
+    private final float price;
 
-    public Price(int id, Calendar date, float price){
-        this.id = id;
+    public Price(int idPrice, int idProduct, Calendar date, float price){
+        this.idPrice = idPrice;
+        this.idProduct = idProduct;
         this.date = date;
         this.price = price;
     }
 
-    public Price(Calendar date, float price){
-        this.id = -1;
+    public Price(int idProduct, Calendar date, float price){
+        this.idPrice = -1;
+        this.idProduct = idProduct;
         this.date = date;
         this.price = price;
     }
 
-    public int getId() {
-        return id;
+    public int getIdPrice() {
+        return idPrice;
+    }
+
+    public int getIdProduct(){
+        return idProduct;
     }
 
     public Calendar getCalendar() {

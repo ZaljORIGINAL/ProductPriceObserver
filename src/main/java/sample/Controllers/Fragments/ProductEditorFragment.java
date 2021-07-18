@@ -22,7 +22,7 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
         logger.info("Создан объект фрагмента редактора продукта. О продукте:\n" +
                 "\t" + product.getName() + "\n" +
                 "\t" + product.getLink() + "\n" +
-                "\t" + product.getTriggerPeriod());
+                "\t" + product.getObserverPeriod());
     }
 
     @Override
@@ -77,7 +77,7 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
         logger.info("Данные с полей получены. Помещение их в объект продукта.");
         product.setUrl(url);
         product.setName(productName);
-        product.setTriggerPeriod(triggerPeriod);
+        product.setObserverPeriod(triggerPeriod);
 
         var price = priceTable.getItems().get(
                 priceTable.getItems().size() - 1);

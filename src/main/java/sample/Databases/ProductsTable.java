@@ -126,7 +126,7 @@ public class ProductsTable extends DatabaseTable {
             try (var statement = connection.prepareStatement(sqlCommand)) {
                 statement.setString(1, product.getLink());
                 statement.setString(2, product.getName());
-                statement.setLong(3, product.getTriggerPeriod());
+                statement.setLong(3, product.getObserverPeriod());
                 try(var result = statement.executeQuery()){
                     result.next();
                     var id = result.getInt(ProductTableContract.ID_COLUMN);
@@ -135,7 +135,7 @@ public class ProductsTable extends DatabaseTable {
                             id,
                             product.getLink(),
                             product.getName(),
-                            product.getTriggerPeriod(),
+                            product.getObserverPeriod(),
                             priceTableName);
                     return product;
                 }
@@ -144,7 +144,7 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public int update(Product product) throws SQLException{
-        logger.info("Запрос на обнавление записи. id записи: " + product.getId());
+        logger.info("Запрос на обнавление записи. id записи: " + product.getIdProduct());
         try (var connection = getConnection()){
             String sqlCommand = "UPDATE " +
                     tableName  + " " +
@@ -159,8 +159,8 @@ public class ProductsTable extends DatabaseTable {
             try (var statement = connection.prepareStatement(sqlCommand)) {
                 statement.setString(1, product.getLink());
                 statement.setString(2, product.getName());
-                statement.setLong(3, product.getTriggerPeriod());
-                statement.setInt(4, product.getId());
+                statement.setLong(3, product.getObserverPeriod());
+                statement.setInt(4, product.getIdProduct());
 
                 return statement.executeUpdate();
             }
@@ -183,7 +183,7 @@ public class ProductsTable extends DatabaseTable {
     }
 
     public int delete(Product product) throws SQLException{
-        return delete(product.getId());
+        return delete(product.getIdProduct());
     }
 
     protected Product extractToProduct(ResultSet result) throws SQLException{

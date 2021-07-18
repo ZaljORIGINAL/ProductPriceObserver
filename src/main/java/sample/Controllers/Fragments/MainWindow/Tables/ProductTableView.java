@@ -1,7 +1,6 @@
 package sample.Controllers.Fragments.MainWindow.Tables;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -53,7 +52,7 @@ public abstract class ProductTableView extends ViewFragment {
             logger.info("Графическая таблица очищена.");
 
             for (Product product : products) {
-                logger.info("Обработка продукта, его id: " + product.getId());
+                logger.info("Обработка продукта, его id: " + product.getIdProduct());
                 try {
                     var pricesTable =
                             new ProductPricesTable(
@@ -95,12 +94,12 @@ public abstract class ProductTableView extends ViewFragment {
                 var actualProduct = answer.getValue();
                 logger.info("Получена актуальная информация о продукте.");
                 var product = tableData.insert(actualProduct.getProduct());
-                if (product.getId() != -1){
+                if (product.getIdProduct() != -1){
                     logger.info("Получен объект продукта зарегестрированного в системе. ");
                     var priceTable = new ProductPricesTable(product.getPriceTableName());
                     logger.info("Получена таблица цен продукта.");
                     var price = priceTable.insert(actualProduct.getPrice());
-                    if (price.getId() != -1)
+                    if (price.getIdPrice() != -1)
                         logger.info("Актуальная цена продукта сохранена");
                     else
                         logger.warn("Неудалось сохранить цену.");
@@ -216,7 +215,7 @@ public abstract class ProductTableView extends ViewFragment {
 
     protected void addToViewTable(ActualProduct actualProduct){
         tableView.getItems().add(actualProduct);
-        logger.info("В граффическую таблицу добавлен элемент. Id добавленного продукта: " + actualProduct.getProduct().getId());
+        logger.info("В граффическую таблицу добавлен элемент. Id добавленного продукта: " + actualProduct.getProduct().getIdProduct());
     }
 
     protected void deleteItemFromViewTable(ActualProduct item){
@@ -224,7 +223,7 @@ public abstract class ProductTableView extends ViewFragment {
         List<ActualProduct> viewTableItems =
                 tableView.getItems();
         viewTableItems.remove(item);
-        logger.info("Id удаленного продукта из графической таблици: " + item.getProduct().getId());
+        logger.info("Id удаленного продукта из графической таблици: " + item.getProduct().getIdProduct());
     }
 
     protected Dialog buildConstructorDialog(ProductConstructorFragment fragment){

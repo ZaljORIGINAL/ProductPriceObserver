@@ -1,8 +1,5 @@
 package sample.Products;
 
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 public class ActualProduct {
     private Product product;
     private Price price;
@@ -21,12 +18,12 @@ public class ActualProduct {
     }
 
     public void setProduct(Product product){
-        if (this.product.getId() == product.getId()){
+        if (this.product.getIdProduct() == product.getIdProduct()){
             this.product = product;
         }else
             throw new RuntimeException("Передан неверный экземпляр объекта типа Product. Id не совпадает! " +
-                    "\nRequired: " + this.product.getId() +
-                    "\nProvided: " + product.getId());
+                    "\nRequired: " + this.product.getIdProduct() +
+                    "\nProvided: " + product.getIdProduct());
     }
 
     public void setPrice(Price price) {

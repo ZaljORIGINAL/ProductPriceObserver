@@ -1,33 +1,34 @@
 package sample.Products;
 
-import sample.Databases.ProductPricesTable;
-
-import java.sql.SQLException;
-
 public class Product {
-    private final int id;
+    private final int idProduct;
+    private final int idShop;
     private String url;
     private String name;
-    private long triggerPeriod;
-    private String priceTableName;
+    private long observerPeriod;
 
-    public Product(int id, String url, String name, long triggerPeriod, String priceTableName){
-        this.id = id;
+    public Product(int idProduct, int idShop,String url, String name, long observerPeriod){
+        this.idProduct = idProduct;
+        this.idShop = idShop;
         this.url = url;
         this.name = name;
-        this.triggerPeriod = triggerPeriod;
-        this.priceTableName = priceTableName;
+        this.observerPeriod = observerPeriod;
     }
 
-    public Product(String url, String name, long triggerPeriod){
-        this.id = -1;
+    public Product(int idShop, String url, String name, long observerPeriod){
+        this.idProduct = -1;
+        this.idShop = idShop;
         this.url = url;
         this.name = name;
-        this.triggerPeriod = triggerPeriod;
+        this.observerPeriod = observerPeriod;
     }
 
-    public int getId() {
-        return id;
+    public int getIdProduct() {
+        return idProduct;
+    }
+
+    public int getIdShop() {
+        return idShop;
     }
 
     public String getLink() {
@@ -38,12 +39,8 @@ public class Product {
         return name;
     }
 
-    public long getTriggerPeriod() {
-        return triggerPeriod;
-    }
-
-    public String getPriceTableName(){
-        return priceTableName;
+    public long getObserverPeriod() {
+        return observerPeriod;
     }
 
     public void setUrl(String url){
@@ -54,12 +51,7 @@ public class Product {
         this.name = name;
     }
 
-    public void setTriggerPeriod(long triggerPeriod) {
-        this.triggerPeriod = triggerPeriod;
-    }
-
-    public void addPrice(Price price) throws SQLException {
-        var table = new ProductPricesTable(priceTableName);
-        table.insert(price);
+    public void setObserverPeriod(long observerPeriod) {
+        this.observerPeriod = observerPeriod;
     }
 }
