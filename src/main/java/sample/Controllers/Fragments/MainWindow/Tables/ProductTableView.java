@@ -5,13 +5,16 @@ import javafx.scene.control.*;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 import sample.Controllers.Fragments.ProductConstructorFragment;
 import sample.Controllers.Fragments.ProductEditorFragment;
 import sample.Controllers.Fragments.ViewFragment;
 import sample.Databases.ProductPricesTable;
 import sample.Databases.ProductsTable;
+import sample.ProductObserver.PriceChangeListener;
 import sample.Products.Product;
 import sample.Products.ActualProduct;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,14 +22,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-public abstract class ProductTableView extends ViewFragment {
+public abstract class ProductTableView extends ViewFragment implements PriceChangeListener {
     private static final Logger logger = LogManager.getLogger(ProductTableView.class);
-    public TableView<ActualProduct> tableView;
-    public Button tableUpdate;
-    protected ProductsTable tableData;
 
+    protected ApplicationContext context;
+    public TableView<ActualProduct> tableView;
     private TableColumn<ActualProduct, String> nameColumn;
     private TableColumn<ActualProduct, String> priceColumn;
+    public Button tableUpdate;
+
+    protected ProductsTable tableData;
+    protected ShopToolsFactory factory;
+
+    public ProductTableView(ApplicationContext context){
+        this.context = context;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -45,7 +55,7 @@ public abstract class ProductTableView extends ViewFragment {
         logger.info("Полное обновление данных в таблице...");
         tableUpdate.setDisable(true);
         try{
-            var products = tableData.getByShop();
+            var products = tableData.getByShop(factory.getShopId());
             logger.info("Получен список продуктов из базы данных: " + products.size());
 
             tableView.getItems().clear();
@@ -54,17 +64,15 @@ public abstract class ProductTableView extends ViewFragment {
             for (Product product : products) {
                 logger.info("Обработка продукта, его id: " + product.getIdProduct());
                 try {
-                    var pricesTable =
-                            new ProductPricesTable(
-                                    product.getPriceTableName());
+                    var pricesTable = context.getBean(ProductPricesTable.class);
                     logger.info("Получена тыблица цен продукта: " + pricesTable.getTableName());
-                    var lastPrice = pricesTable.getLastPriceByProduct(, );
+                    var lastPrice = pricesTable.getLastPriceByProduct(product.getIdProduct());
                     logger.info("Получена последняя цена продукта: " + lastPrice.getPrice());
                     var actualProduct = new ActualProduct(
                             product,
                             lastPrice);
                     addToViewTable(actualProduct);
-                }catch (SQLException exception){
+                }catch (SQLException | NullPointerException exception){
                     logger.info("Ошибка при получении последней цены по продукту.", exception);
                 }
             }
@@ -96,7 +104,7 @@ public abstract class ProductTableView extends ViewFragment {
                 var product = tableData.insert(actualProduct.getProduct());
                 if (product.getIdProduct() != -1){
                     logger.info("Получен объект продукта зарегестрированного в системе. ");
-                    var priceTable = new ProductPricesTable(product.getPriceTableName());
+                    var priceTable = context.getBean(ProductPricesTable.class);
                     logger.info("Получена таблица цен продукта.");
                     var price = priceTable.insert(actualProduct.getPrice());
                     if (price.getIdPrice() != -1)
@@ -107,7 +115,7 @@ public abstract class ProductTableView extends ViewFragment {
                 }else {
                     logger.warn("Неудалось зарегестрировать продукт в системе.");
                 }
-            }catch (SQLException exception){
+            }catch (SQLException | NullPointerException exception){
                 logger.error("Ошибка при сохранении нового продукта.", exception);
                 Alert messageDialog =
                         new Alert(Alert.AlertType.ERROR);
@@ -165,8 +173,7 @@ public abstract class ProductTableView extends ViewFragment {
         if (option.get() == ButtonType.OK){
             logger.info("На вопрос удаления продукта ответ положителен.");
             try {
-                var pricesTable = new ProductPricesTable(
-                        product.getPriceTableName());
+                var pricesTable = context.getBean(ProductPricesTable.class);
                 logger.info("Получена таблица цен продукта.");
                 if (pricesTable.deleteTable()){
                     logger.info("Таблица цен успешно удалена.");

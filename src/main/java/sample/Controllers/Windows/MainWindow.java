@@ -6,9 +6,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.Pane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductsTables.CitilinkProductTableView;
 import sample.Controllers.Fragments.MainWindow.Tables.ProductTableView;
 import sample.OptionsHelper;
+import sample.ProductObserver.ProductObserverService;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -17,12 +19,21 @@ import java.util.ResourceBundle;
 public class MainWindow implements Initializable {
     private static final Logger logger = LogManager.getLogger(MainWindow.class);
 
+    public ApplicationContext context;
     public ChoiceBox<String> shopChoice;
     public Pane tablePanel;
     public Button addNewProduct;
     public Button getMoreInfo;
     public Button deleteProduct;
+
+    private final ProductObserverService productObserverService;
     private ProductTableView productViewTable;
+
+    public MainWindow(ApplicationContext context){
+        this.context = context;
+
+        productObserverService = new ProductObserverService(context);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -32,7 +43,13 @@ public class MainWindow implements Initializable {
         initAddNewProductButton();
         initGetMoreInfoButton();
         initDeleteProductButton();
+
+        productObserverService.start();
         logger.info("Инициализация главного окна завершена.");
+    }
+
+    public void finishAllServices(){
+        productObserverService.finish();
     }
 
     private void initShopChoice() {
@@ -75,7 +92,7 @@ public class MainWindow implements Initializable {
             switch (selected){
                 case OptionsHelper.SHOP_CITILINK:
                 {
-                    productViewTable = new CitilinkProductTableView();
+                    productViewTable = new CitilinkProductTableView(context);
                 }break;
 
                 default:

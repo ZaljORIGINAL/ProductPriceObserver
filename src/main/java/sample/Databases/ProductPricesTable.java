@@ -3,6 +3,7 @@ package sample.Databases;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sample.Databases.Contracts.ProductPricesTableContract;
+import sample.ProductObserver.PriceChangeListener;
 import sample.Products.Price;
 
 import java.sql.*;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ProductPricesTable extends DatabaseTable {
+public class ProductPricesTable extends DatabaseTable implements PriceChangeListener {
     protected static final Logger logger = LogManager.getLogger(ProductPricesTable.class);
 
     public ProductPricesTable(String tableName) throws SQLException {

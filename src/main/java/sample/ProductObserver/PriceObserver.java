@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import sample.Databases.ProductPricesTable;
 import sample.ProductProxys.ProductProxy;
 import sample.Products.Product;
-import sample.ShopToolsFactories.ProductToolsFactory;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,16 +22,16 @@ public class PriceObserver {
         logger.info("Создан экземпляр класса PriceObserver. Обработает товары с периодом обновления: " + period + " мс.");
     }
 
-    public void check(List<ProductToolsFactory> toolsFactories){
+    public void check(List<ShopToolsFactory> toolsFactories){
         logger.info("Запущено обновление товаров (период обновления: " + period + " мс.)");
         var runnable = getRunnable(toolsFactories);
         new Thread(runnable).start();
         logger.info("Запусчен поток на обновление цен.");
     }
 
-    private Runnable getRunnable(List<ProductToolsFactory> toolsFactories){
+    private Runnable getRunnable(List<ShopToolsFactory> toolsFactories){
         return () -> {
-            for (ProductToolsFactory toolsFactory : toolsFactories) {
+            for (ShopToolsFactory toolsFactory : toolsFactories) {
                 try {
                     var productTable = toolsFactory.getProductsTable();
                     logger.info("Получена таблица продуктов: " + productTable.getTableName());

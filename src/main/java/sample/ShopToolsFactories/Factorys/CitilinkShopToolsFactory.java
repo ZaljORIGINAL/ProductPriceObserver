@@ -1,20 +1,17 @@
 package sample.ShopToolsFactories.Factorys;
 
-import sample.Databases.Contracts.ProductTableContract;
-import sample.Databases.ProductsTable;
 import sample.ProductProxys.Parsers.CitilinkShopProductParser;
 import sample.ProductProxys.Parsers.ProductParser;
 import sample.ProductProxys.ShopApi.ProductApi;
-import sample.ShopToolsFactories.ProductToolsFactory;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class CitilinkShopToolsFactory extends ProductToolsFactory {
+public class CitilinkShopToolsFactory extends ShopToolsFactory {
 
     @Override
-    public ProductsTable getProductsTable() throws SQLException {
-        return new ProductsTable(ProductTableContract.CITILINK_TABLE);
+    public int getShopId() {
+        return 1;
     }
 
     @Override

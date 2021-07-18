@@ -31,18 +31,14 @@ public class CitilinkShopProductParser extends ShopProductParser{
     }
 
     @Override
-    public Price getPrice() {
+    public float getPrice() {
         logger.info("Чтение цены продукта с сайта...");
         Elements elements = document.getElementsByClass("ProductHeader__price-default_current-price ");
         Element priceElement = elements.first();
-        String priceValue = priceElement.text();
-        priceValue = StringUtils.trimAllWhitespace(priceValue);
+        String priceString = priceElement.text();
+        priceString = StringUtils.trimAllWhitespace(priceString);
 
-        var price = new Price(
-                Calendar.getInstance(),
-                Float.parseFloat(priceValue));
-
-        logger.info("Полученная цена продукта с ссайта: " + priceValue);
-        return price;
+        logger.info("Полученная цена продукта с ссайта: " + priceString);
+        return Float.parseFloat(priceString);
     }
 }
