@@ -41,7 +41,7 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
             var pricesTable =
                     new ProductPricesTable(product.getPriceTableName());
             logger.info("Получена таблица цен: " + pricesTable.getTableName());
-            var prices = pricesTable.getAll();
+            var prices = pricesTable.getByProduct();
             logger.info("Получен список цен за все время: " + prices.size());
             for (Price price : prices) {
                 priceTable.getItems().add(price);

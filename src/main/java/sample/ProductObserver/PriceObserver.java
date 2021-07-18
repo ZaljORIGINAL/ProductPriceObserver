@@ -35,7 +35,7 @@ public class PriceObserver {
                 try {
                     var productTable = toolsFactory.getProductsTable();
                     logger.info("Получена таблица продуктов: " + productTable.getTableName());
-                    var products = productTable.getByTrigger(period);
+                    var products = productTable.getByTrigger(, period, );
                     logger.info("Количество продуктов на обновление: " + products.size());
                     for (Product product : products) {
                         try {

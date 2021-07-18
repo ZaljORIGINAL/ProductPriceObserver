@@ -1,0 +1,22 @@
+1. Создание таблици:
+    CREATE TABLE Products (
+        id SERIAL PRIMARY KEY,
+        idShop INTEGER NOT NULL,
+        url CHARACTER VARYING(250) NOT NULL,
+        name CHARACTER VARYING(100) NOT NULL),
+        observerPeriod BIGINT NOT NULL)
+
+2. Получение из таблици продуктов 1 магазина:
+    SELECT * FROM Products WHERE idShop = x
+
+3. Получить из таблици записи продуктов определенного магазина с определенным периодом:
+    SELECT * FROM Products WHERE idShop = x AND observerPeriod = x
+
+4. Добавление в таблицу продукта:
+    INSERT INTO Products (idShop, url, name, observerPeriod) VALUES (x, x, x, x) RETURNING idProduct
+
+5. Обнавление продукта в магазине:
+    UPDATE Products SET url = x, name = x, observerPeriod = x WHERE idProduct = x
+
+6. Удаление продукта:
+    DELETE Product WHERE idProduct = x

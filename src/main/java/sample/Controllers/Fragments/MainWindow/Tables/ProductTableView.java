@@ -45,7 +45,7 @@ public abstract class ProductTableView extends ViewFragment {
         logger.info("Полное обновление данных в таблице...");
         tableUpdate.setDisable(true);
         try{
-            var products = tableData.getAll();
+            var products = tableData.getByShop();
             logger.info("Получен список продуктов из базы данных: " + products.size());
 
             tableView.getItems().clear();
@@ -58,7 +58,7 @@ public abstract class ProductTableView extends ViewFragment {
                             new ProductPricesTable(
                                     product.getPriceTableName());
                     logger.info("Получена тыблица цен продукта: " + pricesTable.getTableName());
-                    var lastPrice = pricesTable.getLastPrice();
+                    var lastPrice = pricesTable.getLastPriceByProduct(, );
                     logger.info("Получена последняя цена продукта: " + lastPrice.getPrice());
                     var actualProduct = new ActualProduct(
                             product,

@@ -1,0 +1,15 @@
+1. Создание таблици:
+    CREATE TABLE Prices (
+        id SERIAL PRIMARY KEY,
+        idProduct INTEGER NOT NULL REFERENCES Products(Id) ON DELETE CASCADE,
+        dateTime TIMESTAMP NOT NULL,
+        price NUMERIC NOT NULL)
+
+2. Получение из таблици цен записей по 1 продукту:
+    SELECT * FROM Prices WHERE idProduct = x
+
+3. Получение из таблици максимальной цены по продукту:
+    SELECT * FROM Prices WHERE id = (SELECT MAX(id) SELECT * WHERE idProduct = ?)
+
+4. Добавление в таблицу продукта:
+    INSERT INTO Prices (idProduct, dateTime, price) VALUES (x, x, x) RETURNING idPrice
