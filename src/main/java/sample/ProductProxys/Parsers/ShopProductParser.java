@@ -22,7 +22,9 @@ public abstract class ShopProductParser implements ProductParser {
 
     public Document connect(String linkToProduct) throws IOException{
         logger.info("Совершение подключения...");
-        document = Jsoup.connect(linkToProduct).get();
+        document = Jsoup.connect(linkToProduct)
+                .userAgent("Chrome/81.0.4044.138")
+                .get();
         logger.info("Соединение установлено. Ссылка на продукт: " + linkToProduct);
         return document;
     }

@@ -1,5 +1,6 @@
 package sample.ProductProxys.Parsers;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
@@ -17,6 +18,10 @@ public class CitilinkShopProductParser extends ShopProductParser{
     public CitilinkShopProductParser(String linkToProduct) throws IOException {
         super(linkToProduct);
         logger.info("Создан экземпляр класса.");
+    }
+
+    public CitilinkShopProductParser(Document document){
+        this.document = document;
     }
 
     @Override
