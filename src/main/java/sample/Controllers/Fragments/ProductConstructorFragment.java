@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sample.Products.ActualProduct;
 import sample.Products.Product;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -11,7 +12,8 @@ import java.util.ResourceBundle;
 public abstract class ProductConstructorFragment extends ProductParamFragment {
     protected static final Logger logger = LogManager.getLogger(ProductConstructorFragment.class);
 
-    public ProductConstructorFragment(){
+    public ProductConstructorFragment(ShopToolsFactory shopTools){
+        super(shopTools);
         logger.info("Создан объект фрагмента редактора продукта.");
     }
 
@@ -39,7 +41,7 @@ public abstract class ProductConstructorFragment extends ProductParamFragment {
         }
         logger.info("Данные с полей получены. Помещение их в объект продукта.");
 
-        var product = new Product(url, productName, triggerPeriod);
+        var product = new Product(shopTools.getShopId(), url, productName, triggerPeriod);
         logger.info("Создан объект продукта: " + product);
         var price = priceTable.getItems().get(
                 priceTable.getItems().size() - 1);

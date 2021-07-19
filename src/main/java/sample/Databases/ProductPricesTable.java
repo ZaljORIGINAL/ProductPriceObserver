@@ -5,11 +5,11 @@ import org.apache.logging.log4j.Logger;
 import sample.Databases.Contracts.ProductPricesTableContract;
 import sample.ProductObserver.PriceChangeListener;
 import sample.Products.Price;
+import sample.Products.Product;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 public class ProductPricesTable extends DatabaseTable implements PriceChangeListener {
     protected static final Logger logger = LogManager.getLogger(ProductPricesTable.class);
@@ -72,12 +72,15 @@ public class ProductPricesTable extends DatabaseTable implements PriceChangeList
                     tableName + " " +
                     "WHERE " + ProductPricesTableContract.ID_COLUMN + "=" +
                         "(SELECT MAX(" + ProductPricesTableContract.ID_COLUMN + ") FROM " +
-                            "(SELECT * WHERE " + ProductPricesTableContract.ID_PRODUCT_COLUMN + " = ?) " +
+                            "(SELECT * FROM " +
+                    tableName + " " +
+                    "WHERE " + ProductPricesTableContract.ID_PRODUCT_COLUMN + " = ?) AS pricesOfProduct " +
                     ")";
 
             logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement =
                          connection.prepareStatement(sqlCommand)) {
+                statement.setInt(1, idProduct);
                 ResultSet result = statement.executeQuery();
                 result.next();
 
@@ -86,7 +89,7 @@ public class ProductPricesTable extends DatabaseTable implements PriceChangeList
         }
     }
 
-    public Price insert(Price price) throws SQLException{
+    public Price insert(int idProduct, Price price) throws SQLException{
         logger.info("Запрос на добавление записи о цене...");
         try (var connection = getConnection()){
             String sqlCommand = "INSERT INTO " +
@@ -100,7 +103,7 @@ public class ProductPricesTable extends DatabaseTable implements PriceChangeList
             logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement = connection.prepareStatement(sqlCommand) ) {
                 Timestamp time = new java.sql.Timestamp(price.getCalendar().getTimeInMillis());
-                statement.setInt(1, price.getIdProduct());
+                statement.setInt(1, idProduct);
                 statement.setTimestamp(2, time);
                 statement.setFloat(3, price.getPrice());
                 try (var result = statement.executeQuery()){
@@ -116,8 +119,6 @@ public class ProductPricesTable extends DatabaseTable implements PriceChangeList
     private Price extractToPrice(ResultSet result) throws SQLException{
         var id = result.getInt(
                 ProductPricesTableContract.ID_COLUMN);
-        var idProduct = result.getInt(
-                ProductPricesTableContract.ID_PRODUCT_COLUMN);
         var d = (Timestamp) result.getObject(
                 ProductPricesTableContract.DATE_COLUMN);
         Calendar date = Calendar.getInstance();
@@ -125,6 +126,45 @@ public class ProductPricesTable extends DatabaseTable implements PriceChangeList
         var price = result.getFloat(
                 ProductPricesTableContract.PRICE_COLUMN);
 
-        return new Price(id, idProduct, date, price);
+        return new Price(id, date, price);
+    }
+
+    @Override
+    public void notifOfPriceChanged(Map<Integer, Price> list, ShopToolsFactory shopTools) {
+        logger.info("Поступило оповещение об обновлении цен.\n" +
+                "\tid магазина: " + shopTools.getShopId() + "\n" +
+                "\tКоличество: " + list.size());
+        try (var connection = getConnection()){
+            for (Map.Entry<Integer, Price> entry : list.entrySet()) {
+                String sqlCommand = "INSERT INTO " +
+                        tableName + " " +
+                        "(" +
+                        ProductPricesTableContract.ID_PRODUCT_COLUMN + ", " +
+                        ProductPricesTableContract.DATE_COLUMN + ", " +
+                        ProductPricesTableContract.PRICE_COLUMN + ") " +
+                        "VALUES (?, ?, ?) RETURNING " + ProductPricesTableContract.ID_COLUMN;
+
+                logger.info("Конструкция запроса: " + sqlCommand);
+                try (var statement = connection.prepareStatement(sqlCommand) ) {
+                    var idProduct = entry.getKey();
+                    var price = entry.getValue();
+
+                    Timestamp time = new java.sql.Timestamp(price.getCalendar().getTimeInMillis());
+                    statement.setInt(1, idProduct);
+                    statement.setTimestamp(2, time);
+                    statement.setFloat(3, price.getPrice());
+                    try (var result = statement.executeQuery()){
+                        result.next();
+                        var id = result.getInt(ProductPricesTableContract.ID_COLUMN);
+
+                        price = new Price(id, price.getCalendar(), price.getPrice());
+                    }
+                } catch (SQLException exception){
+                    logger.error("Ошибка в исполнении запроса.", exception);
+                }
+            }
+        }catch (SQLException exception){
+            logger.error("Ошибка в получении соединения с базой данных!", exception);
+        }
     }
 }

@@ -10,9 +10,11 @@ import org.springframework.util.StringUtils;
 import sample.ProductProxys.ProductProxy;
 import sample.Products.ActualProduct;
 import sample.Products.Price;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public abstract class ProductParamFragment extends ViewFragment {
@@ -25,6 +27,12 @@ public abstract class ProductParamFragment extends ViewFragment {
     public TableView<Price> priceTable;
     public TableColumn<Price, String> dateColumn;
     public TableColumn<Price, String> priceColumn;
+
+    protected ShopToolsFactory shopTools;
+
+    public ProductParamFragment(ShopToolsFactory shopTools){
+        this.shopTools = shopTools;
+    }
 
     @Override
     public String getPathToFXML() {
@@ -49,7 +57,9 @@ public abstract class ProductParamFragment extends ViewFragment {
 
     public abstract ActualProduct saveProduct();
 
-    protected abstract ProductProxy getProductProxy(String linkToProduct) throws IOException;
+    protected ProductProxy getProductProxy(String linkToProduct) throws IOException{
+        return shopTools.getParser(linkToProduct);
+    }
 
     protected void initView(){
         logger.info("Инициализация граффических элементов фрагмента...");
@@ -69,7 +79,11 @@ public abstract class ProductParamFragment extends ViewFragment {
 
                 String productName = productProxy.getName();
                 logger.info("Полученное наименование продукта с сайта: " + productName);
-                Price price = productProxy.getPrice();
+                var priceValue = productProxy.getPrice();
+                var price = new Price(
+                        shopTools.getShopId(),
+                        Calendar.getInstance(),
+                        priceValue);
                 logger.info("Получена цена продукта с сайта: " + price.getPrice());
 
                 nameField.setText(productName);

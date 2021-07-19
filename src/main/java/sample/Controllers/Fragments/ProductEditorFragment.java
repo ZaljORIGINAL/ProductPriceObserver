@@ -3,10 +3,12 @@ package sample.Controllers.Fragments;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sample.Databases.Contracts.ProductPricesTableContract;
 import sample.Databases.ProductPricesTable;
 import sample.Products.ActualProduct;
 import sample.Products.Price;
 import sample.Products.Product;
+import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -17,7 +19,8 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
 
     protected Product product;
 
-    public ProductEditorFragment(Product product){
+    public ProductEditorFragment(ShopToolsFactory shopTools, Product product){
+        super(shopTools);
         this.product = product;
         logger.info("Создан объект фрагмента редактора продукта. О продукте:\n" +
                 "\t" + product.getName() + "\n" +
@@ -39,9 +42,10 @@ public abstract class ProductEditorFragment extends ProductParamFragment{
             nameField.setDisable(false);
             choiceField.setDisable(false);
             var pricesTable =
-                    new ProductPricesTable(product.getPriceTableName());
+                    new ProductPricesTable(
+                            ProductPricesTableContract.TABLE_NAME);
             logger.info("Получена таблица цен: " + pricesTable.getTableName());
-            var prices = pricesTable.getByProduct();
+            var prices = pricesTable.getByProduct(product.getIdProduct());
             logger.info("Получен список цен за все время: " + prices.size());
             for (Price price : prices) {
                 priceTable.getItems().add(price);

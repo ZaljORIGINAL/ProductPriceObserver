@@ -41,18 +41,25 @@ public class ProductObserverService {
 
         logger.info("Потготовка таймера на обновление цен с периодом в 1час.");
         scheduledService.scheduleAtFixedRate(
-                ()-> new Thread(new TriggerTusk()).start(),
+                ()-> {
+                    var observer = new PriceObserver(context, 3600000, subscribers);
+                    observer.start(shopTools);
+                },
                 0,
                 1,
                 TimeUnit.HOURS);
         scheduledService.scheduleAtFixedRate(
-                ()-> new Thread(new TriggerTusk()).start(),
-                0,
+                ()-> {
+                    var observer = new PriceObserver(context, 43200000, subscribers);
+                    observer.start(shopTools);
+                },                0,
                 12,
                 TimeUnit.HOURS);
         scheduledService.scheduleAtFixedRate(
-                ()-> new Thread(new TriggerTusk()).start(),
-                0,
+                ()-> {
+                    var observer = new PriceObserver(context, 86400000, subscribers);
+                    observer.start(shopTools);
+                },                0,
                 24,
                 TimeUnit.HOURS);
         logger.info("Установлен таймер на обновления цен товаров.");

@@ -1,7 +1,7 @@
 package sample.Databases.Contracts;
 
 public abstract class ProductTableContract {
-    public static final String TABLE_NAME = "Products";
+    public static final String TABLE_NAME = "products";
 
     public static final String ID_COLUMN = "id";
     public static final String ID_SHOP_COLUMN = "idShop";

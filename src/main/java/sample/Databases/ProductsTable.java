@@ -35,6 +35,27 @@ public class ProductsTable extends DatabaseTable {
         }
     }
 
+    public Product getById(int idProduct) throws SQLException{
+        logger.info("Запрос на получение товаров по параметру:\n" +
+                "\tid продукта: " + idProduct);
+        try (var connection = getConnection()){
+            String sqlCommand = "SELECT * FROM " +
+                    tableName +" " +
+                    "WHERE " + ProductTableContract.ID_COLUMN + " = ?";
+            logger.info("Конструкция запроса: " + sqlCommand);
+
+            try(var statement =
+                        connection.prepareStatement(sqlCommand)) {
+                statement.setInt(1, idProduct);
+                try (var result = statement.executeQuery()) {
+                    result.next();
+                    var product = extractToProduct(result);
+                    return product;
+                }
+            }
+        }
+    }
+
     public List<Product> getByShop(int idShop) throws SQLException{
         logger.info("Запрос на получение товаров по параметру:\n" +
                 "\tid магазина: " + idShop);
@@ -110,7 +131,7 @@ public class ProductsTable extends DatabaseTable {
 
             logger.info("Конструкция запроса: " + sqlCommand);
             try (var statement = connection.prepareStatement(sqlCommand)) {
-                statement.setInt(1, product.getIdProduct());
+                statement.setInt(1, product.getIdShop());
                 statement.setString(2, product.getLink());
                 statement.setString(3, product.getName());
                 statement.setLong(4, product.getObserverPeriod());
@@ -119,7 +140,7 @@ public class ProductsTable extends DatabaseTable {
                     var id = result.getInt(ProductTableContract.ID_COLUMN);
                     product = new Product(
                             id,
-                            product.getIdProduct(),
+                            product.getIdShop(),
                             product.getLink(),
                             product.getName(),
                             product.getObserverPeriod());

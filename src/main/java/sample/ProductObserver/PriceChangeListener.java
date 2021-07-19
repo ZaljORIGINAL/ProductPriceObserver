@@ -1,7 +1,10 @@
 package sample.ProductObserver;
 
-import java.util.List;
+import sample.Products.Price;
+import sample.ShopToolsFactories.ShopToolsFactory;
+
+import java.util.Map;
 
 public interface PriceChangeListener {
-    void notifOfPriceChanged(List<PriceChangeListener> list);
+    void notifOfPriceChanged(Map<Integer, Price> list, ShopToolsFactory shopTools);
 }

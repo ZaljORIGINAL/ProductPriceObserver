@@ -2,64 +2,89 @@ package sample.ProductObserver;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sample.Databases.ProductPricesTable;
-import sample.ProductProxys.ProductProxy;
+import org.springframework.context.ApplicationContext;
+import sample.Databases.ProductsTable;
+import sample.Products.Price;
 import sample.Products.Product;
 import sample.ShopToolsFactories.ShopToolsFactory;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 
 //TODO Надо как то найти способ понятного вывода логов при многопатоке.
 public class PriceObserver {
     private final static Logger logger = LogManager.getLogger(PriceObserver.class);
 
+    private final ApplicationContext context;
     private final long period;
+    private List<PriceChangeListener> priceChangeListenerList;
 
-    public PriceObserver(long period){
+    public PriceObserver(ApplicationContext context,
+                         long period,
+                         List<PriceChangeListener> priceChangeListenerList){
+        this.context = context;
         this.period = period;
+        this.priceChangeListenerList = priceChangeListenerList;
+
         logger.info("Создан экземпляр класса PriceObserver. Обработает товары с периодом обновления: " + period + " мс.");
     }
 
-    public void check(List<ShopToolsFactory> toolsFactories){
+    public void start(List<ShopToolsFactory> toolsFactories){
         logger.info("Запущено обновление товаров (период обновления: " + period + " мс.)");
         var runnable = getRunnable(toolsFactories);
         new Thread(runnable).start();
         logger.info("Запусчен поток на обновление цен.");
     }
 
-    private Runnable getRunnable(List<ShopToolsFactory> toolsFactories){
-        return () -> {
-            for (ShopToolsFactory toolsFactory : toolsFactories) {
-                try {
-                    var productTable = toolsFactory.getProductsTable();
-                    logger.info("Получена таблица продуктов: " + productTable.getTableName());
-                    var products = productTable.getByTrigger(, period, );
-                    logger.info("Количество продуктов на обновление: " + products.size());
-                    for (Product product : products) {
-                        try {
-                            var priceTableName = product.getPriceTableName();
-                            var priceTable = new ProductPricesTable(priceTableName);
-                            logger.info("Получена таблица цен: " + priceTable.getTableName());
-                            ProductProxy productProxy = toolsFactory.getParser(
-                                    product.getLink());
-                            logger.info("Получен парсер по продукту.\n" +
-                                    "\tНаименование продукта: " + product.getName() + "\n" +
-                                    "\tСсылка на продукт: " + product.getLink());
-                            var price = productProxy.getPrice();
-                            logger.info("Получена новая цена: " + price.getPrice());
-                            priceTable.insert(price);
-                        }catch (SQLException | IOException exception){
-                            logger.error("Ошибка в обновлении цены продукта:\n" +
-                                    "\tНаименование продукта: " + product.getName() + "\n" +
-                                    "\tСсылка на продукт: " + product.getLink(), exception);
-                        }
+    private Runnable getRunnable(List<ShopToolsFactory> shopTools){
+        return () -> check(shopTools);
+    }
+
+    private void check(List<ShopToolsFactory> shopsTools){
+        var productTable = context.getBean(ProductsTable.class);
+        logger.info("Получена таблица продуктов: " + productTable.getTableName());
+        for (ShopToolsFactory shopTools : shopsTools){
+            try{
+                var products = productTable.getByTrigger(shopTools.getShopId(), period);
+                logger.info("Oт магазина id = "  + shopTools.getShopId() + " получено " + products.size());
+                var priceMap = getActualPrice(shopTools, products);
+                logger.info("Успешно получено " + priceMap.size() + " из " + products.size());
+                if (priceMap.size()!=0){
+                    for (PriceChangeListener listener : priceChangeListenerList) {
+                        listener.notifOfPriceChanged(priceMap, shopTools);
                     }
-                }catch (SQLException exception){
-                    logger.error("Ошибка при работе с таблицей продуктов магазина.", exception);
+                    logger.info("Подписчкик (" + priceChangeListenerList + ") оповещены об изменении.");
                 }
+            }catch (SQLException exception){
+                logger.error("Ошибка при запросе на получение продуктов!", exception);
+            }catch (NullPointerException exception){
+                logger.error("Неудалось получить объект таблици цен пролуктов!", exception);
             }
-        };
+        }
+    }
+
+    private Map<Integer, Price> getActualPrice(ShopToolsFactory shopTools, List<Product> products){
+        var map = new HashMap<Integer, Price>();
+        for (Product product : products) {
+            try {
+                var parser = shopTools.getParser(product.getLink());
+                logger.info("Получен парсер по продукту.\n" +
+                        "\tНаименование продукта: " + product.getName() + "\n" +
+                        "\tСсылка на продукт: " + product.getLink());
+                var priceValue = parser.getPrice();
+                var price = new Price(
+                        product.getIdProduct(),
+                        Calendar.getInstance(),
+                        priceValue);
+                logger.info("Получена новая цена: " + price.getPrice());
+
+                map.put(product.getIdProduct(), price);
+            } catch (IOException exception) {
+                logger.error("Ошибка при получении парсера для просмотра актуальной цены!", exception);
+            }
+        }
+
+        return map;
     }
 }

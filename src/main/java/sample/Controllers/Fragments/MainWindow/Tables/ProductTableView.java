@@ -12,6 +12,7 @@ import sample.Controllers.Fragments.ViewFragment;
 import sample.Databases.ProductPricesTable;
 import sample.Databases.ProductsTable;
 import sample.ProductObserver.PriceChangeListener;
+import sample.Products.Price;
 import sample.Products.Product;
 import sample.Products.ActualProduct;
 import sample.ShopToolsFactories.ShopToolsFactory;
@@ -32,7 +33,7 @@ public abstract class ProductTableView extends ViewFragment implements PriceChan
     public Button tableUpdate;
 
     protected ProductsTable tableData;
-    protected ShopToolsFactory factory;
+    protected ShopToolsFactory shopTools;
 
     public ProductTableView(ApplicationContext context){
         this.context = context;
@@ -55,7 +56,7 @@ public abstract class ProductTableView extends ViewFragment implements PriceChan
         logger.info("Полное обновление данных в таблице...");
         tableUpdate.setDisable(true);
         try{
-            var products = tableData.getByShop(factory.getShopId());
+            var products = tableData.getByShop(shopTools.getShopId());
             logger.info("Получен список продуктов из базы данных: " + products.size());
 
             tableView.getItems().clear();
@@ -66,7 +67,7 @@ public abstract class ProductTableView extends ViewFragment implements PriceChan
                 try {
                     var pricesTable = context.getBean(ProductPricesTable.class);
                     logger.info("Получена тыблица цен продукта: " + pricesTable.getTableName());
-                    var lastPrice = pricesTable.getLastPriceByProduct(product.getIdProduct());
+                    Price lastPrice = pricesTable.getLastPriceByProduct(product.getIdProduct());
                     logger.info("Получена последняя цена продукта: " + lastPrice.getPrice());
                     var actualProduct = new ActualProduct(
                             product,
@@ -106,7 +107,7 @@ public abstract class ProductTableView extends ViewFragment implements PriceChan
                     logger.info("Получен объект продукта зарегестрированного в системе. ");
                     var priceTable = context.getBean(ProductPricesTable.class);
                     logger.info("Получена таблица цен продукта.");
-                    var price = priceTable.insert(actualProduct.getPrice());
+                    var price = priceTable.insert(product.getIdProduct(), actualProduct.getPrice());
                     if (price.getIdPrice() != -1)
                         logger.info("Актуальная цена продукта сохранена");
                     else

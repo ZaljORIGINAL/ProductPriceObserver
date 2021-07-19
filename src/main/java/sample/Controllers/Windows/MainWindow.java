@@ -43,8 +43,8 @@ public class MainWindow implements Initializable {
         initAddNewProductButton();
         initGetMoreInfoButton();
         initDeleteProductButton();
+        initProductObserverService();
 
-        productObserverService.start();
         logger.info("Инициализация главного окна завершена.");
     }
 
@@ -82,6 +82,11 @@ public class MainWindow implements Initializable {
         deleteProduct.setDisable(true);
         deleteProduct.setOnAction(actionEvent -> clickDeleteProduct());
         logger.info("Инициализация кнопки УДАЛИТЬ завершена.");
+    }
+
+    private void initProductObserverService(){
+        productObserverService.addSubscriber(productViewTable);
+        productObserverService.start();
     }
 
     private void switchTableView(){
