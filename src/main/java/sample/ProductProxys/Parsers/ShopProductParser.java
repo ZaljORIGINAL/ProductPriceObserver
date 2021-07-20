@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import sample.ProductProxys.ProductProxy;
 
+import java.io.File;
 import java.io.IOException;
 
 public abstract class ShopProductParser implements ProductParser {
@@ -21,11 +22,15 @@ public abstract class ShopProductParser implements ProductParser {
     }
 
     public Document connect(String linkToProduct) throws IOException{
-        logger.info("Совершение подключения...");
-        document = Jsoup.connect(linkToProduct)
-                .userAgent("Chrome/81.0.4044.138")
-                .get();
-        logger.info("Соединение установлено. Ссылка на продукт: " + linkToProduct);
+        if (linkToProduct.contains("https://")){
+            document = Jsoup.connect(linkToProduct)
+                    .userAgent("Chrome/81.0.4044.138")
+                    .get();
+        }else{
+            var file = new File(linkToProduct);
+            document = Jsoup.parse(file, "UTF-8");
+        }
+
         return document;
     }
 }

@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Намутил что то на сонную голову и тяжелое сердце... Тупа Bruh">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_base_linux_17_ea_14.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_controls_linux_17_ea_14.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_fxml_linux_17_ea_14.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_openjfx_javafx_graphics_linux_17_ea_14.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Task2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Task2.iml" afterDir="false" />
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка.">
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductProxys/Parsers/Citilink/CitilinkProductPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductProxys/Parsers/ShopProductParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductProxys/Parsers/ShopProductParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/ProductProxys/Parsers/Citilink/CitilinkProductPage" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sample/ProductProxys/Parsers/ShopProductParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sample/ProductProxys/Parsers/ShopProductParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/ProductProxys/Parsers/Citilink/CitilinkProductPage" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +194,7 @@
       <recent name="sample.Databases.ShopsDatabase.DnsShop" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="JUnit.CitilinkShopProductParserTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -240,7 +242,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CitilinkShopProductParserTest.getName" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CitilinkShopProductParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
@@ -250,8 +252,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
       <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
-      <option name="METHOD_NAME" value="getName" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
@@ -260,7 +261,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CitilinkShopProductParserTest.getPrice" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CitilinkShopProductParserTest.connectionTest_LocalFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
@@ -270,7 +271,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
       <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
-      <option name="METHOD_NAME" value="getPrice" />
+      <option name="METHOD_NAME" value="connectionTest_LocalFile" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
@@ -280,17 +281,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductConstructorTest.fullSystemTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CitilinkShopProductParserTest.connectionTest_WebSite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sample.Controllers.Windows.*" />
+          <option name="PATTERN" value="sample.ProductProxys.Parsers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="sample.Controllers.Windows" />
-      <option name="MAIN_CLASS_NAME" value="sample.Controllers.Windows.ProductConstructorTest" />
-      <option name="METHOD_NAME" value="fullSystemTest" />
+      <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
+      <option name="METHOD_NAME" value="connectionTest_WebSite" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
@@ -300,17 +301,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductPricesTableTest.getById" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CitilinkShopProductParserTest.connectionTest_WebSite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sample.Databases.*" />
+          <option name="PATTERN" value="sample.ProductProxys.Parsers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="sample.Databases" />
-      <option name="MAIN_CLASS_NAME" value="sample.Databases.ProductPricesTableTest" />
-      <option name="METHOD_NAME" value="getById" />
+      <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
+      <option name="METHOD_NAME" value="connectionTest_WebSite" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CitilinkShopProductParserTest.getNameTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Task2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sample.ProductProxys.Parsers.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
+      <option name="METHOD_NAME" value="getNameTest" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
@@ -373,11 +394,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ProductsTableTest.getConnectionTest" />
-        <item itemvalue="JUnit.ProductPricesTableTest.getById" />
-        <item itemvalue="JUnit.ProductConstructorTest.fullSystemTest" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest.getPrice" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest.getName" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest.getNameTest" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_LocalFile" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_WebSite" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_WebSite" />
       </list>
     </recent_temporary>
   </component>
@@ -461,7 +482,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626642058087</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Внесены изменения в целях раотосопосбности на домашнем компьюторе.">
+      <created>1626775029154</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1626775029154</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -520,7 +548,8 @@
     <MESSAGE value="Класс Product.java был изменен согласно новой архитектуре таблици продуктов: id товара, id магазина, url на страницу товара, name товара, период проверки.&#10;Класс Price.java был изменен согласно новой архитектуре таблици цен: id цены, id продукта, дата получения цены, цена товара." />
     <MESSAGE value="Класс ProductPricesTable.java и ProductsTable.java изменен метод создания таблици согласно новой архитектуре. Соответсвенно были изменены/удалены методы согласно новой архитектуре. Соответсвенно в ProductPricesTableContract.java и ProductTableContract.java были изменены, дописаны наименования новых колонок, изменены наименования некоторых колонок." />
     <MESSAGE value="Намутил что то на сонную голову и тяжелое сердце... Тупа Bruh" />
-    <option name="LAST_COMMIT_MESSAGE" value="Намутил что то на сонную голову и тяжелое сердце... Тупа Bruh" />
+    <MESSAGE value="Внесены изменения в целях раотосопосбности на домашнем компьюторе." />
+    <option name="LAST_COMMIT_MESSAGE" value="Внесены изменения в целях раотосопосбности на домашнем компьюторе." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -584,51 +613,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/sample/Databases/ProductPricesTable.java</url>
           <line>128</line>
           <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>28</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="45" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>32</line>
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>34</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>35</line>
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>36</line>
-          <option name="timeStamp" value="49" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java</url>
-          <line>40</line>
-          <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/Controllers/Windows/ProductConstructorTest.java</url>
