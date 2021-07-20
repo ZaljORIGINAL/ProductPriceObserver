@@ -5,14 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка.">
-      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductProxys/Parsers/Citilink/CitilinkProductPage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesNew/CitilinkProductPage1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesNew/CitilinkProductPage2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesNew/CitilinkProductPage3.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesOld/CitilinkProductPage1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesOld/CitilinkProductPage2.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesOld/CitilinkProductPage3.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductProxys/Parsers/ShopProductParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductProxys/Parsers/ShopProductParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/ProductProxys/Parsers/Citilink/CitilinkProductPage" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/sample/ProductProxys/Parsers/ShopProductParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sample/ProductProxys/Parsers/ShopProductParser.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/ProductProxys/Parsers/Citilink/CitilinkProductPage" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/sample/ProductProxys/Parsers/CitilinkShopProductParserTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/ProductObserverService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/ProductObserverService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sample/ProductObserver/PriceObserver.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sample/ProductObserver/PriceObserver.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/sample/ProductObserver/ProductObserverService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/sample/ProductObserver/ProductObserverService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,10 +71,10 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="module-info" />
-        <option value="JUnit4 Test Class" />
         <option value="FxmlFile" />
         <option value="Class" />
         <option value="Interface" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -175,26 +179,33 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="dynamic.classpath" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/resources/ProductObserver/ProductsPagesOld" />
     <property name="project.structure.last.edited" value="Problems" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.31407943" />
     <property name="recentsLimit" value="5" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Программирование\Java\Практическая работа\Максим технологии\Task2\src\test\resources\ProductObserver\ProductsPagesOld" />
+      <recent name="D:\Программирование\Java\Практическая работа\Максим технологии\Task2\src\test\resources\ProductObserver\ProductsPagesNew" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Программирование\Java\Практическая работа\Максим технологии\Task2\src\test\resources\ProductObserver\" />
       <recent name="D:\Программирование\Java\Практическая работа\Максим технологии\Task2\src\main\resources\window" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="sample.ProductObserver" />
       <recent name="sample.Controllers.Windows" />
       <recent name="sample.ProductCheckers.Parsers" />
       <recent name="sample.Databases" />
       <recent name="sample.Databases.ShopsDatabase.DnsShop" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.CitilinkShopProductParserTest">
+  <component name="RunManager" selected="JUnit.PriceObserverTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <module name="" />
       <option name="MAIN_CLASS_NAME" />
@@ -261,46 +272,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CitilinkShopProductParserTest.connectionTest_LocalFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Task2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sample.ProductProxys.Parsers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
-      <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
-      <option name="METHOD_NAME" value="connectionTest_LocalFile" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CitilinkShopProductParserTest.connectionTest_WebSite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Task2" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sample.ProductProxys.Parsers.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
-      <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
-      <option name="METHOD_NAME" value="connectionTest_WebSite" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="CitilinkShopProductParserTest.connectionTest_WebSite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
@@ -341,17 +312,56 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ProductsTableTest.getConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="PriceObserverTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sample.Databases.*" />
+          <option name="PATTERN" value="sample.ProductObserver.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="sample.Databases" />
-      <option name="MAIN_CLASS_NAME" value="sample.Databases.ProductsTableTest" />
-      <option name="METHOD_NAME" value="getConnectionTest" />
+      <option name="PACKAGE_NAME" value="sample.ProductObserver" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductObserver.PriceObserverTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PriceObserverTest.checkTest_Notification" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Task2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sample.ProductObserver.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sample.ProductObserver" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductObserver.PriceObserverTest" />
+      <option name="METHOD_NAME" value="checkTest_Notification" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="moduleWithDependencies" />
+      </option>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PriceObserverTest.getActualPriceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Task2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="sample.ProductObserver.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="sample.ProductObserver" />
+      <option name="MAIN_CLASS_NAME" value="sample.ProductObserver.PriceObserverTest" />
+      <option name="METHOD_NAME" value="getActualPriceTest" />
       <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
@@ -394,11 +404,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.PriceObserverTest" />
+        <item itemvalue="JUnit.PriceObserverTest.checkTest_Notification" />
+        <item itemvalue="JUnit.PriceObserverTest.getActualPriceTest" />
         <item itemvalue="JUnit.CitilinkShopProductParserTest" />
         <item itemvalue="JUnit.CitilinkShopProductParserTest.getNameTest" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_LocalFile" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_WebSite" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest.connectionTest_WebSite" />
       </list>
     </recent_temporary>
   </component>
@@ -489,7 +499,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626775029154</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка.">
+      <created>1626778411556</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1626778411556</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -549,7 +566,8 @@
     <MESSAGE value="Класс ProductPricesTable.java и ProductsTable.java изменен метод создания таблици согласно новой архитектуре. Соответсвенно были изменены/удалены методы согласно новой архитектуре. Соответсвенно в ProductPricesTableContract.java и ProductTableContract.java были изменены, дописаны наименования новых колонок, изменены наименования некоторых колонок." />
     <MESSAGE value="Намутил что то на сонную голову и тяжелое сердце... Тупа Bruh" />
     <MESSAGE value="Внесены изменения в целях раотосопосбности на домашнем компьюторе." />
-    <option name="LAST_COMMIT_MESSAGE" value="Внесены изменения в целях раотосопосбности на домашнем компьюторе." />
+    <MESSAGE value="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка." />
+    <option name="LAST_COMMIT_MESSAGE" value="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -732,10 +750,25 @@
           <line>25</line>
           <option name="timeStamp" value="115" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="136" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/sample/Databases/ProductsTable.java</url>
           <line>197</line>
-          <properties class="sample.Databases.ProductsTable">
+          <properties class="sample.Databases.ProductsTable" method="extractToProduct">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="73" />

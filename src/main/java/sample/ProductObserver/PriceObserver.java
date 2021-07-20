@@ -16,15 +16,15 @@ import java.util.*;
 public class PriceObserver {
     private final static Logger logger = LogManager.getLogger(PriceObserver.class);
 
-    private final ApplicationContext context;
     private final long period;
+    private final ProductsTable productsTable;
     private List<PriceChangeListener> priceChangeListenerList;
 
-    public PriceObserver(ApplicationContext context,
-                         long period,
+    public PriceObserver(long period,
+                         ProductsTable productsTable,
                          List<PriceChangeListener> priceChangeListenerList){
-        this.context = context;
         this.period = period;
+        this.productsTable = productsTable;
         this.priceChangeListenerList = priceChangeListenerList;
 
         logger.info("Создан экземпляр класса PriceObserver. Обработает товары с периодом обновления: " + period + " мс.");
@@ -42,11 +42,10 @@ public class PriceObserver {
     }
 
     private void check(List<ShopToolsFactory> shopsTools){
-        var productTable = context.getBean(ProductsTable.class);
-        logger.info("Получена таблица продуктов: " + productTable.getTableName());
+        logger.info("Получена таблица продуктов: " + productsTable.getTableName());
         for (ShopToolsFactory shopTools : shopsTools){
             try{
-                var products = productTable.getByTrigger(shopTools.getShopId(), period);
+                var products = productsTable.getByTrigger(shopTools.getShopId(), period);
                 logger.info("Oт магазина id = "  + shopTools.getShopId() + " получено " + products.size());
                 var priceMap = getActualPrice(shopTools, products);
                 logger.info("Успешно получено " + priceMap.size() + " из " + products.size());
@@ -64,7 +63,7 @@ public class PriceObserver {
         }
     }
 
-    private Map<Integer, Price> getActualPrice(ShopToolsFactory shopTools, List<Product> products){
+    public Map<Integer, Price> getActualPrice(ShopToolsFactory shopTools, List<Product> products){
         var map = new HashMap<Integer, Price>();
         for (Product product : products) {
             try {
@@ -74,7 +73,6 @@ public class PriceObserver {
                         "\tСсылка на продукт: " + product.getLink());
                 var priceValue = parser.getPrice();
                 var price = new Price(
-                        product.getIdProduct(),
                         Calendar.getInstance(),
                         priceValue);
                 logger.info("Получена новая цена: " + price.getPrice());

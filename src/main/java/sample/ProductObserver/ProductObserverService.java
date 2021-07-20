@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import sample.Databases.ProductPricesTable;
+import sample.Databases.ProductsTable;
 import sample.ShopToolsFactories.Factorys.CitilinkShopToolsFactory;
 import sample.ShopToolsFactories.ShopToolsFactory;
 
@@ -38,11 +39,16 @@ public class ProductObserverService {
 
     public void start(){
         List<ShopToolsFactory> shopTools = getShopTools();
+        final var productsTable =
+                context.getBean(ProductsTable.class);
 
         logger.info("Потготовка таймера на обновление цен с периодом в 1час.");
         scheduledService.scheduleAtFixedRate(
                 ()-> {
-                    var observer = new PriceObserver(context, 3600000, subscribers);
+                    var observer = new PriceObserver(
+                            3600000,
+                            productsTable,
+                            subscribers);
                     observer.start(shopTools);
                 },
                 0,
@@ -50,14 +56,20 @@ public class ProductObserverService {
                 TimeUnit.HOURS);
         scheduledService.scheduleAtFixedRate(
                 ()-> {
-                    var observer = new PriceObserver(context, 43200000, subscribers);
+                    var observer = new PriceObserver(
+                            3600000,
+                            productsTable,
+                            subscribers);
                     observer.start(shopTools);
                 },                0,
                 12,
                 TimeUnit.HOURS);
         scheduledService.scheduleAtFixedRate(
                 ()-> {
-                    var observer = new PriceObserver(context, 86400000, subscribers);
+                    var observer = new PriceObserver(
+                            3600000,
+                            productsTable,
+                            subscribers);
                     observer.start(shopTools);
                 },                0,
                 24,
