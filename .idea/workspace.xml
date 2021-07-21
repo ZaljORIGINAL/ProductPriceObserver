@@ -4,9 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Создан класс тестов ProductPricesTableTest.java">
+    <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="Изменен паттерн строки логироания. Лобавлен вывод уровня лога (INFO, ERROR и т. д.)">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Task2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Task2.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/ProductObserverService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ProductObserver/ProductObserverService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sample/Databases/ProductPricesTableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sample/Databases/ProductPricesTableTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/log4j2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest$NotifSubscriber.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest$NotifSubscriber.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/sample/ProductObserver/PriceObserverTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -249,7 +260,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CitilinkShopProductParserTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="CitilinkShopProductParserTest.getNameTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Task2" />
       <extension name="coverage">
         <pattern>
@@ -259,7 +270,8 @@
       </extension>
       <option name="PACKAGE_NAME" value="sample.ProductProxys.Parsers" />
       <option name="MAIN_CLASS_NAME" value="sample.ProductProxys.Parsers.CitilinkShopProductParserTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="getNameTest" />
+      <option name="TEST_OBJECT" value="method" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="TEST_SEARCH_SCOPE">
         <value defaultName="moduleWithDependencies" />
@@ -380,11 +392,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ProductPricesTableTest.insertTest" />
-        <item itemvalue="JUnit.PriceObserverTest.checkTest_Notification" />
-        <item itemvalue="JUnit.PriceObserverTest" />
         <item itemvalue="JUnit.PriceObserverTest.getActualPriceTest" />
-        <item itemvalue="JUnit.CitilinkShopProductParserTest" />
+        <item itemvalue="JUnit.PriceObserverTest.checkTest_Notification" />
+        <item itemvalue="JUnit.CitilinkShopProductParserTest.getNameTest" />
+        <item itemvalue="JUnit.ProductPricesTableTest.insertTest" />
+        <item itemvalue="JUnit.PriceObserverTest" />
       </list>
     </recent_temporary>
   </component>
@@ -496,7 +508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626852168403</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Изменен паттерн строки логироания. Лобавлен вывод уровня лога (INFO, ERROR и т. д.)">
+      <created>1626852646836</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1626852646836</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -571,7 +590,8 @@
     <MESSAGE value="Класс ShopProductParser.java. Изменен метод connection. Теперь в не зависимости от переданного пути (локальной/ссылка на страницу) метод будет возваращать парсинг.&#10;Создан новый тест для обработки локальных путей.&#10;В остальных тестах, для проверки работоспособности отправляется документ, а не строка." />
     <MESSAGE value="Опять херня с библиотекой javaFx" />
     <MESSAGE value="Создан класс тестов ProductPricesTableTest.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Создан класс тестов ProductPricesTableTest.java" />
+    <MESSAGE value="Изменен паттерн строки логироания. Лобавлен вывод уровня лога (INFO, ERROR и т. д.)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Изменен паттерн строки логироания. Лобавлен вывод уровня лога (INFO, ERROR и т. д.)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -756,22 +776,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>85</line>
+          <line>83</line>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>135</line>
+          <line>136</line>
           <option name="timeStamp" value="451" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>136</line>
+          <line>137</line>
           <option name="timeStamp" value="452" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>125</line>
+          <line>126</line>
           <option name="timeStamp" value="457" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -827,96 +847,86 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
           <line>60</line>
-          <option name="timeStamp" value="477" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>61</line>
-          <option name="timeStamp" value="478" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>62</line>
           <option name="timeStamp" value="479" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>63</line>
+          <line>61</line>
           <option name="timeStamp" value="480" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>66</line>
+          <line>64</line>
           <option name="timeStamp" value="487" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/sample/ProductObserver/PriceObserver.java</url>
-          <line>67</line>
+          <line>65</line>
           <option name="timeStamp" value="488" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>106</line>
+          <line>107</line>
           <option name="timeStamp" value="489" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>107</line>
+          <line>108</line>
           <option name="timeStamp" value="490" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>108</line>
+          <line>109</line>
           <option name="timeStamp" value="491" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>109</line>
+          <line>110</line>
           <option name="timeStamp" value="492" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>110</line>
+          <line>111</line>
           <option name="timeStamp" value="493" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>111</line>
+          <line>112</line>
           <option name="timeStamp" value="494" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>112</line>
+          <line>113</line>
           <option name="timeStamp" value="495" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>113</line>
+          <line>114</line>
           <option name="timeStamp" value="496" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>137</line>
+          <line>138</line>
           <option name="timeStamp" value="497" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>114</line>
+          <line>115</line>
           <option name="timeStamp" value="498" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>115</line>
+          <line>116</line>
           <option name="timeStamp" value="499" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>116</line>
+          <line>117</line>
           <option name="timeStamp" value="500" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/sample/ProductObserver/PriceObserverTest.java</url>
-          <line>117</line>
+          <line>118</line>
           <option name="timeStamp" value="501" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">

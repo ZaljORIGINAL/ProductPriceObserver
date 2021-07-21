@@ -12,6 +12,7 @@ import static org.junit.Assert.*;
 
 public class ProductPricesTableTest {
 
+
     /* FIXME Тесты не работают по следующей ошибке:
     *   ОШИБКА: INSERT или UPDATE в таблице "productprice_test" нарушает ограничение внешнего ключа "productprice_test_idproduct_fkey"
         Подробности: Ключ (idproduct)=(25) отсутствует в таблице "products*/

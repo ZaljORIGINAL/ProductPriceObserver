@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ProductObserverService {
-    private final static Logger logger = LogManager.getLogger(ProductObserverService.class);
+    private final static Logger logger =   LogManager.getLogger(ProductObserverService.class);
 
     private final ApplicationContext context;
     private final ScheduledExecutorService scheduledService;

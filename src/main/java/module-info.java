@@ -9,6 +9,7 @@ module Task2 {
     requires org.apache.logging.log4j;
     requires org.apache.logging.log4j.core;
     requires com.google.common;
+    requires slf4j.api;
 
     opens sample;
     opens sample.Controllers.Windows;

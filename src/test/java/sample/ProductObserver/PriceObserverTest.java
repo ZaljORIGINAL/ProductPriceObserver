@@ -50,6 +50,7 @@ public class PriceObserverTest {
         var shopTools = new CitilinkShopToolsFactory();
         List<Product> productList = new ArrayList<>();
 
+        //TODO Применить конструкцию ClassName.class.getClass().getResource(PATH_TO_RESOURCE)
         Path resourceDirectory1 = Paths.get("src","test","resources", "ProductObserver", "ProductsPagesNew", "CitilinkProductPage1.html");
         String absolutePath1 = resourceDirectory1.toFile().getAbsolutePath();
         productList.add(
@@ -64,7 +65,7 @@ public class PriceObserverTest {
                 new Product(3, shopTools.getShopId(), absolutePath3, "Name1", 3600000));
 
         var observer = new PriceObserver(
-                360000,
+                3600000,
                 new ProductsTable("products_test"),
                 null);
 

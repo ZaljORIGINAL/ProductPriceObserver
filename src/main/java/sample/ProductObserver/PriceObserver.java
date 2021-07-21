@@ -49,7 +49,7 @@ public class PriceObserver {
                 logger.info("Oт магазина id = "  + shopTools.getShopId() + " получено " + products.size());
                 var priceMap = getActualPrice(shopTools, products);
                 logger.info("Успешно получено " + priceMap.size() + " из " + products.size());
-                if (priceMap.size()!=0){
+                if (!priceMap.isEmpty()){
                     for (PriceChangeListener listener : priceChangeListenerList) {
                         listener.notifOfPriceChanged(priceMap, shopTools);
                     }
@@ -57,8 +57,6 @@ public class PriceObserver {
                 }
             }catch (SQLException exception){
                 logger.error("Ошибка при запросе на получение продуктов!", exception);
-            }catch (NullPointerException exception){
-                logger.error("Неудалось получить объект таблици цен пролуктов!", exception);
             }
         }
     }
