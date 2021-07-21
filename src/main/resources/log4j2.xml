@@ -4,12 +4,12 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
+            <PatternLayout pattern="%-5level %d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
         </Console>
         <RollingFile name="File"
               fileName="appСache/logs/AppLog.log"
               filePattern="appСache/logs/$${dd MMM yyyy HH:mm:ss,SSS}-%i.log.gz" append="true">
-            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
+            <PatternLayout pattern="%-5level %d{dd MMM yyyy HH:mm:ss,SSS}: Thread: %t [%C{1}]: %msg %n"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
