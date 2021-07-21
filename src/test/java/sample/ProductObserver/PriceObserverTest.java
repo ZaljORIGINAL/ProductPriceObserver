@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.Assert.*;
 
@@ -83,55 +84,56 @@ public class PriceObserverTest {
     }
 
     @Test
-    public void checkTest_Notification() throws SQLException{
-        //Потготовка таблици
+    public void checkTest_Notification() throws SQLException, InterruptedException {
+        //Проверяющий объект. Будет ожидать уведомления от сервиса о окончании работы.
+        CountDownLatch waiter = new CountDownLatch(1);
+        var subscriber = new NotifSubscriber();
+
+        //Потготовка проверяемого продукта и таблици
         var shopTools = new CitilinkShopToolsFactory();
-        List<Product> productList = new ArrayList<>();
 
         Path resourceDirectory1 = Paths.get("src","test","resources", "ProductObserver", "ProductsPagesNew", "CitilinkProductPage1.html");
         String absolutePath1 = resourceDirectory1.toFile().getAbsolutePath();
-        productList.add(
-                new Product(1, shopTools.getShopId(), absolutePath1, "Name1", 3600000));
+        var product1 =
+                new Product(shopTools.getShopId(), absolutePath1, "Name1", 3600000);
 
         var productTable = new ProductsTable("products_test");
-        for (Product product:productList) {
-            productTable.insert(product);
-        }
+        var actualProduct = productTable.insert(product1);
 
-        /*Потготовка проверяющего слушателя.
-        * В месте с таблицей в коллекцию запускается объект,
-        * который так же среагирует на уведомление о получении цены.
-        * Этот объект запустить заранее подготовленный алгоритм проверки
-        * через механизм Callback */
-        ArrayList<PriceChangeListener> subscribers =
-                new ArrayList<>();
-        var subscriber = new NotifSubscriber();
-
+        //Проверяющий блок
         var taskToCheck = new SomeCallback() {
             @Override
             public void call() {
                 var priceMap = subscriber.priceMap;
-                if (priceMap.size() == 1){
-                    var price = priceMap.get(1);
+                if (priceMap.size() != 0){
+                    var price = priceMap.get(actualProduct.getIdProduct());
                     //1100 взято из файла CitilinkProductPage1.html.
-                    if (price.getPrice() != 1100);
+                    if (price.getPrice() == 1100)
+                        waiter.countDown();
+                    else
                         fail();
                 }else
                     fail();
             }
         };
         subscriber.setTask(taskToCheck);
+
+        //Список объектов ожидающих обновления цены
+        ArrayList<PriceChangeListener> subscribers =
+                new ArrayList<>();
         subscribers.add(subscriber);
 
+        var observer = new PriceObserver(
+                3600000,
+                productTable,
+                subscribers);
 
+        //Список магазинов на просмотр
         ArrayList<ShopToolsFactory> shopsTools =
                 new ArrayList<>();
         shopsTools.add(shopTools);
 
-        var observer = new PriceObserver(
-                360000,
-                productTable,
-                subscribers);
         observer.start(shopsTools);
+        waiter.await();
     }
 }

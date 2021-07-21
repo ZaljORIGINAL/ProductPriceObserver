@@ -31,10 +31,10 @@ public class PriceObserver {
     }
 
     public void start(List<ShopToolsFactory> toolsFactories){
-        logger.info("Запущено обновление товаров (период обновления: " + period + " мс.)");
+        logger.info("Запщено обновление товаров (период обновления: " + period + " мс.)");
         var runnable = getRunnable(toolsFactories);
         new Thread(runnable).start();
-        logger.info("Запусчен поток на обновление цен.");
+        logger.info("Запущен поток на обновление цен.");
     }
 
     private Runnable getRunnable(List<ShopToolsFactory> shopTools){
